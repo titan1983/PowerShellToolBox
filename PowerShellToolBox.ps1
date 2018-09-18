@@ -1,16 +1,16 @@
 #Created by Tian Xiaodong
-#Çë½«½Å±¾ÎÄ¼ş±£´æÎªANSI±àÂë¸ñÊ½£¬·ñÔòÎŞ·¨Õı³£Êä³öÖĞÎÄ×Ö·û¡£
+#è¯·å°†è„šæœ¬æ–‡ä»¶ä¿å­˜ä¸ºANSIç¼–ç æ ¼å¼ï¼Œå¦åˆ™æ— æ³•æ­£å¸¸è¾“å‡ºä¸­æ–‡å­—ç¬¦ã€‚
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 #Global Define
-$title = "PowerShell ÀÁÈË¹¤¾ß"
+$title = "PowerShell æ‡’äººå·¥å…·"
 
 Function Init_power
 {
-    $warning = "¼´½«¿ªÊ¼¹¦ºÄÆÀ²â³õÊ¼»¯£¬µã»÷OK¼ü¼ÌĞø£¬µã»÷Cancel¼üÍË³ö¡£`nInitial is coming, press `"OK`" to continue, or press `"Cancel`" to abort."
-    $done = "³õÊ¼»¯Íê³É£¬Çë¾¡¿ìÍê³ÉÆÀ²â¡£`nDone, please do the evaluation ASAP."
+    $warning = "å³å°†å¼€å§‹åŠŸè€—è¯„æµ‹åˆå§‹åŒ–ï¼Œç‚¹å‡»OKé”®ç»§ç»­ï¼Œç‚¹å‡»Cancelé”®é€€å‡ºã€‚`nInitial is coming, press `"OK`" to continue, or press `"Cancel`" to abort."
+    $done = "åˆå§‹åŒ–å®Œæˆï¼Œè¯·å°½å¿«å®Œæˆè¯„æµ‹ã€‚`nDone, please do the evaluation ASAP."
 
     $ws = New-Object -ComObject WScript.Shell
     $wsr = $ws.popup($warning,0,$title,1 + 64)
@@ -30,23 +30,23 @@ Function Init_power
                 }
                 else
                 {
-                    $Console.Text = "³õÊ¼»¯Ê§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                    $Console.Text = "åˆå§‹åŒ–å¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
                 }
               }
-            0 { $Console.Text = "Ã»ÕÒµ½Éè±¸¡£" }
-            {$_ -ge 2} { $Console.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡" }
+            0 { $Console.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚" }
+            {$_ -ge 2} { $Console.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼" }
         }
     }
     else
     {
-        $Console.Text = "³õÊ¼»¯ÒÑÈ¡Ïû¡£·ÅĞÄ£¬ÎÒÃÇÉ¶¶¼Ã»¸É¡£"
+        $Console.Text = "åˆå§‹åŒ–å·²å–æ¶ˆã€‚æ”¾å¿ƒï¼Œæˆ‘ä»¬å•¥éƒ½æ²¡å¹²ã€‚"
     }
     return
 }
 
 Function List_devices
-#Õâ¸öº¯ÊıºÜÖØÒª£¬¶à´¦ÅĞ¶Ï¾ùÒÀÀµ¸Ãº¯ÊıµÄÔËĞĞ½á¹û¡£
-#·µ»ØÒÑÁ¬½ÓAndroidÉè±¸µÄÊıÁ¿£¬ÀàĞÍÎªÕûĞÎ¡£
+#è¿™ä¸ªå‡½æ•°å¾ˆé‡è¦ï¼Œå¤šå¤„åˆ¤æ–­å‡ä¾èµ–è¯¥å‡½æ•°çš„è¿è¡Œç»“æœã€‚
+#è¿”å›å·²è¿æ¥Androidè®¾å¤‡çš„æ•°é‡ï¼Œç±»å‹ä¸ºæ•´å½¢ã€‚
 {
     $list_devices = adb devices
 
@@ -63,44 +63,54 @@ Function List_devices
                 $wireless_count++
             }
         }
-        $Console.Text = $temp + "`nµ±Ç°ÒÑÁ¬½Ó¡° + ($list_devices.Count-2) + ¡±Ì¨AndroidÉè±¸¡£" + "`nÆäÖĞ°üº¬¡° + ¡°$wireless_count¡± + ¡±Ì¨ÎŞÏßÁ¬½ÓÉè±¸¡£"
+        $Console.Text = $temp + "`nå½“å‰å·²è¿æ¥ â€œ + ($list_devices.Count-2) + â€ å°Androidè®¾å¤‡ã€‚" + "`nå…¶ä¸­åŒ…å« â€œ + â€œ$wireless_countâ€ + â€ å°æ— çº¿è¿æ¥è®¾å¤‡ã€‚"
         return [int]( $list_devices.Count - 2 )
     }
     else
     {
-        $Console.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éADB»·¾³¡£"
+        $Console.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥ADBç¯å¢ƒã€‚"
     }
 }
 
 Function Export_bugreport
+#å¦‚æœåªè¿æ¥äº†ä¸€å°è¿œç¨‹è®¾å¤‡ï¼Œåˆ™ä¸å¯¼å‡ºã€‚å› ä¸ºè¿œç¨‹è®¾å¤‡å¯¼å‡ºçš„Bugreportæ— æ•ˆã€‚
 {
     switch ( ( $device_count = List_devices ) )
     {
         1 {
             try
             {
-                $Console.Text = "ÕıÔÚµ¼³ö£¬´Ë¹ı³Ì»áºÄÊ±Êı·ÖÖÓ£¬ÇëÄÍĞÄµÈ´ı¡£`nµ¼³öÍê³ÉÇ°±¾¹¤¾ß²»¿Éµã»÷¡£"
+                $list_devices = adb devices
 
-                if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                if ( $list_devices[1].Contains( ":" )  )
                 {
-                    adb bugreport
+                    $Console.Text = "è¿œç¨‹è®¾å¤‡ï¼Œä¸äºˆä»¥å¯¼å‡ºæ—¥å¿—ã€‚"
                 }
                 else
                 {
-                    $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
-                    adb bugreport > $filename
+                    $Console.Text = "æ­£åœ¨å¯¼å‡ºï¼Œæ­¤è¿‡ç¨‹ä¼šè€—æ—¶æ•°åˆ†é’Ÿï¼Œè¯·è€å¿ƒç­‰å¾…ã€‚`nå¯¼å‡ºå®Œæˆå‰æœ¬å·¥å…·ä¸å¯ç‚¹å‡»ã€‚"
+
+                    if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                    {
+                        adb bugreport
+                    }
+                    else
+                    {
+                        $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
+                        adb bugreport > $filename
+                    }
+                    $Console.Text = â€œå¯¼å‡ºå®Œæˆï¼`nâ€ + "Bugreportæ—¥å¿—æ–‡ä»¶å·²å­˜æ”¾äºï¼š`n" + ( Get-Location )
+                    $ws = New-Object -ComObject WScript.Shell
+                    $wsi = $ws.popup(â€œå¯¼å‡ºå®Œæˆï¼â€,0,$title,0 + 64)
                 }
-                $Console.Text = ¡°µ¼³öÍê³É£¡`n¡± + "BugreportÈÕÖ¾ÎÄ¼şÒÑ´æ·ÅÓÚ£º`n" + ( Get-Location )
-                $ws = New-Object -ComObject WScript.Shell
-                $wsi = $ws.popup(¡°µ¼³öÍê³É£¡¡±,0,$title,0 + 64)
             }
             catch [System.Exception]
             {
-                $Console.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                $Console.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
             }
           }
-        0 { $Console.Text = "Ã»ÕÒµ½Éè±¸¡£" }
-        {$_ -ge 2 } { $Console.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡`nµ¼³öÊ±µçÄÔÉÏÖ»ÄÜÁ¬½ÓÒ»Ì¨AndroidÉè±¸¡£" }
+        0 { $Console.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚" }
+        {$_ -ge 2 } { $Console.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼`nå¯¼å‡ºæ—¶ç”µè„‘ä¸Šåªèƒ½è¿æ¥ä¸€å°Androidè®¾å¤‡ã€‚" }
     }
 }
 
@@ -113,22 +123,22 @@ Function Show_android_version
             {
                 $Get_android_ver = adb shell getprop ro.build.version.release
                 $Get_android_API = adb shell getprop ro.build.version.sdk
-                $Info.Text = "Android°æ±¾: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API
+                $Info.Text = "Androidç‰ˆæœ¬: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API
             }
             catch [System.Exception]
             {
-                $Info.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                $Info.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
             }
           }
-        0 { $Info.Text = "Ã»ÕÒµ½Éè±¸¡£" }
-        {$_ -ge 2 } { $Info.Text = "Á¬ÁËÕâÃ´¶àÌ¨Éè±¸£¬ÎÒÄÄÖªµÀÒª²éÄÄ¸ö¡£" }
+        0 { $Info.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚" }
+        {$_ -ge 2 } { $Info.Text = "è¿äº†è¿™ä¹ˆå¤šå°è®¾å¤‡ï¼Œæˆ‘å“ªçŸ¥é“è¦æŸ¥å“ªä¸ªã€‚" }
     }
 }
 
 Function Reboot
 {
     $ws = New-Object -ComObject WScript.Shell
-    $wsr = $ws.popup("¼´½«ÖØÆôÉè±¸£¬È·¶¨Òª¼ÌĞø£¿",0,$title,1 + 64)
+    $wsr = $ws.popup("å³å°†é‡å¯è®¾å¤‡ï¼Œç¡®å®šè¦ç»§ç»­ï¼Ÿ",0,$title,1 + 64)
 
     if ( $wsr -eq 1 )
     {
@@ -136,15 +146,15 @@ Function Reboot
         {
             1 {
                 adb reboot
-                $Info.Text = "ÒÑÖØÆô£¬Çë¼ì²éÉè±¸¡£"
+                $Info.Text = "å·²é‡å¯ï¼Œè¯·æ£€æŸ¥è®¾å¤‡ã€‚"
              }
-            0 { $Info.Text = "Ã»ÕÒµ½Éè±¸¡£" }
-            {$_ -ge 2} {$Info.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡Ã»·¨ÖØÆô¡£"}
+            0 { $Info.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚" }
+            {$_ -ge 2} {$Info.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼æ²¡æ³•é‡å¯ã€‚"}
         }       
     }
     else
     {
-        $Info.Text = "ºÃºÃºÃ£¬²»ÖØÆôÁË¡£"
+        $Info.Text = "å¥½å¥½å¥½ï¼Œä¸é‡å¯äº†ã€‚"
     }
 }
 
@@ -162,7 +172,7 @@ Function StartUp
     $MainForm.ShowInTaskbar = $True
     $MainForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Fixed3D
 
-    #ÕâÊÇ¸ö²»¿É¼ûµÄ¿Ø¼ş£¬ÊÇTabÒ³¿Ø¼şµÄÈİÆ÷£¬ËùÒÔÃû³ÆÊ¹ÓÃÁËĞ¡Ğ´¿ªÍ·¡£
+    #è¿™æ˜¯ä¸ªä¸å¯è§çš„æ§ä»¶ï¼Œæ˜¯Tabé¡µæ§ä»¶çš„å®¹å™¨ï¼Œæ‰€ä»¥åç§°ä½¿ç”¨äº†å°å†™å¼€å¤´ã€‚
     $tabControl = New-Object System.Windows.Forms.TabControl
     $tabControl.Location = New-Object System.Drawing.Point(0, 10);
     $tabControl.SelectedIndex = 0;
@@ -177,81 +187,81 @@ Function StartUp
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_power.Size = New-Object System.Drawing.Size(500, 400);
     $Tab_power.TabIndex = 0;
-    $Tab_power.Text = "¹¦ºÄÆÀ²âÏà¹Ø";
+    $Tab_power.Text = "åŠŸè€—è¯„æµ‹ç›¸å…³";
     $Tab_power.UseVisualStyleBackColor = "true";
 
     $Tab_adb_tools.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_adb_tools.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_adb_tools.Size = New-Object System.Drawing.Size(500, 400);
     $Tab_adb_tools.TabIndex = 0;
-    $Tab_adb_tools.Text = "ADB³£ÓÃ¹¤¾ß";
+    $Tab_adb_tools.Text = "ADBå¸¸ç”¨å·¥å…·";
     $Tab_adb_tools.UseVisualStyleBackColor = "true";
 
     $Tab_logcat.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_logcat.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_logcat.Size = New-Object System.Drawing.Size(500, 400);
     $Tab_logcat.TabIndex = 0;
-    $Tab_logcat.Text = "Logcat¿ìÕÕ";
+    $Tab_logcat.Text = "Logcatå¿«ç…§";
     $Tab_logcat.UseVisualStyleBackColor = "true";
 
 
-    #ÒÔÏÂÎªtab_powerÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_poweré¡µçš„å…ƒç´ 
     $Init_Button = New-Object System.Windows.Forms.Button
     $Init_Button.Location = New-Object System.Drawing.Point(360,40)
     $Init_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Init_Button.Text = "¹¦ºÄÆÀ²â³õÊ¼»¯"
+    $Init_Button.Text = "åŠŸè€—è¯„æµ‹åˆå§‹åŒ–"
     $Init_Button.add_click( {Init_power} )
 
     $List_Button = New-Object System.Windows.Forms.Button
     $List_Button.Location = New-Object System.Drawing.Point(360,100)
     $List_Button.Size = New-Object System.Drawing.Size(120,40)
-    $List_Button.Text = "ÒÑÁ¬½ÓAndroidÉè±¸"
+    $List_Button.Text = "å·²è¿æ¥Androidè®¾å¤‡"
     $List_Button.add_click( {List_devices} )
 
     $Exit_Button = New-Object System.Windows.Forms.Button
     $Exit_Button.Location = New-Object System.Drawing.Point(380,320)
     $Exit_Button.Size = New-Object System.Drawing.Size(90,40)
-    $Exit_Button.Text = "ÍË³ö"
+    $Exit_Button.Text = "é€€å‡º"
     $Exit_Button.add_click( { $MainForm.Close() } )
 
     $Export_bugreport_Button = New-Object System.Windows.Forms.Button
     $Export_bugreport_Button.Location = New-Object System.Drawing.Point(360,160)
     $Export_bugreport_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Export_bugreport_Button.Text = "µ¼³öBugreportÈÕÖ¾"
+    $Export_bugreport_Button.Text = "å¯¼å‡ºBugreportæ—¥å¿—"
     $Export_bugreport_Button.add_click( {Export_bugreport} )
 
     $Console = New-Object System.Windows.Forms.RichTextBox
     $Console.Location = New-Object System.Drawing.Point(20,40) 
     $Console.Size = New-Object System.Drawing.Size(300,240) 
     $Console.ReadOnly = $True
-    $Console.Text = "Ö´ĞĞ½á¹ûÏÔÊ¾ÔÚÕâÀï"
+    $Console.Text = "æ‰§è¡Œç»“æœæ˜¾ç¤ºåœ¨è¿™é‡Œ"
     $Console.WordWrap = $True
 
-    #ÒÔÏÂÎªtab_adb_toolsÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_adb_toolsé¡µçš„å…ƒç´ 
     $Show_android_version_Button = New-Object System.Windows.Forms.Button
     $Show_android_version_Button.Location = New-Object System.Drawing.Point(360,40)
     $Show_android_version_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Show_android_version_Button.Text = "ÏÔÊ¾Android°æ±¾"
+    $Show_android_version_Button.Text = "æ˜¾ç¤ºAndroidç‰ˆæœ¬"
     $Show_android_version_Button.add_click( {Show_android_version} )
 
     $Reboot_Button = New-Object System.Windows.Forms.Button
     $Reboot_Button.Location = New-Object System.Drawing.Point(360,100)
     $Reboot_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Reboot_Button.Text = "ÖØÆôAndroidÉè±¸"
+    $Reboot_Button.Text = "é‡å¯Androidè®¾å¤‡"
     $Reboot_Button.add_click( {Reboot} )
 
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
     $Info.Size = New-Object System.Drawing.Size(300,200) 
     $Info.ReadOnly = $True
-    $Info.Text = "ÄãÏë¿´µãÉ¶£¿"
+    $Info.Text = "ä½ æƒ³çœ‹ç‚¹å•¥ï¼Ÿ"
     $Info.WordWrap = $True
 
-    #ÒÔÏÂÎªÖ÷´°ÌåÏÔÊ¾ÔªËØ
+    #ä»¥ä¸‹ä¸ºä¸»çª—ä½“æ˜¾ç¤ºå…ƒç´ 
     $Time_label = New-Object System.Windows.Forms.Label
     $Time_label.Location = New-Object System.Drawing.Point(20,360)
     $Time_label.Size = New-Object System.Drawing.Size(280,20)
-    $Time_label.Text = "¹¤¾ßÆô¶¯ÓÚ£º" + (Get-Date -Format "yyyyÄêMÔÂdÈÕ H:m:s")
+    $Time_label.Text = "å·¥å…·å¯åŠ¨äºï¼š" + (Get-Date -Format "yyyyå¹´Mæœˆdæ—¥ H:m:s")
 
     $MainForm.Controls.Add($Exit_Button)
     $MainForm.Controls.Add($Time_label)
