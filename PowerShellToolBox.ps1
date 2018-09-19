@@ -114,6 +114,35 @@ Function Export_bugreport
     }
 }
 
+Function Run_battery_historian
+{
+
+    if ( get-process | where-object {$_.Name -eq "battery-historian"} )
+    {
+	    write-host "Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/" -ForegroundColor Red
+        $Console.Text = "Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/"
+        $ws = New-Object -ComObject WScript.Shell
+	    $wsr = $ws.popup("Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/",0,"PowerShell 懒人工具系列",0 + 64)
+        Start-Process -FilePath http://localhost:9999/
+    }
+
+    else
+    {
+        $Console.Text = "Battery Historian 正在运行。`n请访问 http://localhost:9999/"
+	    $path = Get-Item -Path $env:GOPATH\src\github.com\google\battery-historian
+	    
+        if ( $path -ne $null )
+        {
+            cd $path
+            Start-Process powershell.exe -ArgumentList "write-host Battery Historian 正在运行，请不要关闭此窗口。 -ForegroundColor Yellow `ngo run cmd/battery-historian/battery-historian.go" -WindowStyle Minimized
+        }
+        else
+        {
+            $Console.Text = "工具都没装你运行个毛线！"
+        }
+    }
+}
+
 Function Show_android_version
 {
     switch ( ( $device_count = List_devices ) )
@@ -230,6 +259,12 @@ Function StartUp
     $Export_bugreport_Button.Text = "导出Bugreport日志"
     $Export_bugreport_Button.add_click( {Export_bugreport} )
 
+    $Run_batt_Button = New-Object System.Windows.Forms.Button
+    $Run_batt_Button.Location = New-Object System.Drawing.Point(360,220)
+    $Run_batt_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Run_batt_Button.Text = "运行Battery Historian"
+    $Run_batt_Button.add_click( {Run_battery_historian} )
+
     $Console = New-Object System.Windows.Forms.RichTextBox
     $Console.Location = New-Object System.Drawing.Point(20,40) 
     $Console.Size = New-Object System.Drawing.Size(300,240) 
@@ -261,7 +296,7 @@ Function StartUp
     $Time_label = New-Object System.Windows.Forms.Label
     $Time_label.Location = New-Object System.Drawing.Point(20,360)
     $Time_label.Size = New-Object System.Drawing.Size(280,20)
-    $Time_label.Text = "工具启动于：" + (Get-Date -Format "yyyy年M月d日 H:m:s")
+    $Time_label.Text = "工具启动于：" + (Get-Date -Format "yyyy年M月d日 dddd H:m:s")
 
     $MainForm.Controls.Add($Exit_Button)
     $MainForm.Controls.Add($Time_label)
@@ -275,6 +310,7 @@ Function StartUp
     $Tab_power.Controls.Add($Init_Button)
     $Tab_power.Controls.Add($Console)
     $Tab_power.Controls.Add($List_Button)
+    $Tab_power.Controls.Add($Run_batt_Button)
 
     $Tab_adb_tools.Controls.Add($Show_android_version_Button)
     $Tab_adb_tools.Controls.Add($Info)
