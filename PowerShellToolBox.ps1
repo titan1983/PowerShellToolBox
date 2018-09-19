@@ -342,6 +342,7 @@ Function StartUp
     $Tab_adb_tools.Controls.Add($Info)
     $Tab_adb_tools.Controls.Add($Reboot_Button)
 
+    $MainForm.Add_Shown({$MainForm.Activate()})
     $result = $MainForm.ShowDialog()
 }
 
