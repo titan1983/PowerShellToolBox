@@ -74,43 +74,52 @@ Function List_devices
 
 Function Export_bugreport
 #如果只连接了一台远程设备，则不导出。因为远程设备导出的Bugreport无效。
+#当前目录为根目录时也不导出，因为bugreport工具不支持在根目录下导出，这个不是我的BUG，是bugreport的BUG。
 {
-    switch ( ( $device_count = List_devices ) )
+    $rootD_flag = isRootDirectory
+    if ( $rootD_flag -eq 0 )
     {
-        1 {
-            try
-            {
-                $list_devices = adb devices
-
-                if ( $list_devices[1].Contains( ":" )  )
+        switch ( ( $device_count = List_devices ) )
+        {
+            1 {
+                try
                 {
-                    $Console.Text = "远程设备，不予以导出日志。"
-                }
-                else
-                {
-                    $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
+                    $list_devices = adb devices
 
-                    if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                    if ( $list_devices[1].Contains( ":" )  )
                     {
-                        adb bugreport
+                        $Console.Text = "远程设备，不予以导出日志。"
                     }
                     else
                     {
-                        $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
-                        adb bugreport > $filename
+                        $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
+
+                        if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                        {
+                            adb bugreport
+                        }
+                        else
+                        {
+                            $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
+                            adb bugreport > $filename
+                        }
+                        $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
+                        $ws = New-Object -ComObject WScript.Shell
+                        $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
                     }
-                    $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
-                    $ws = New-Object -ComObject WScript.Shell
-                    $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
                 }
-            }
-            catch [System.Exception]
-            {
-                $Console.Text = "执行失败，请检查手机连接或ADB环境。"
-            }
-          }
-        0 { $Console.Text = "没找到设备。" }
-        {$_ -ge 2 } { $Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。" }
+                catch [System.Exception]
+                {
+                    $Console.Text = "执行失败，请检查手机连接或ADB环境。"
+                }
+              }
+            0 { $Console.Text = "没找到设备。" }
+            {$_ -ge 2 } { $Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。" }
+        }
+    }
+    else
+    {
+        $Console.Text = "当前目录为根目录，无法导出。`n因为bugreport工具不支持在根目录下导出。`n这个不是我的BUG，是bugreport的BUG。`n解决方案是：把本工具放在非根目录的目录下运行。"
     }
 }
 
@@ -187,6 +196,23 @@ Function Reboot
     }
 }
 
+Function isRootDirectory
+{
+    $path_per = Get-Location
+    cd /
+    $path_after = Get-Location
+
+    if ( [String]($path_per) -eq [String]($path_after) )
+    {
+        return 1
+    }
+    else
+    {
+        cd $path_per
+        return 0
+    }
+    
+}
 
 Function StartUp
 {
