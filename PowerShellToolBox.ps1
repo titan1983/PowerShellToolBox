@@ -24,8 +24,8 @@ Function Init_power
 
                 switch ( ($list_devices) )
                 {
-                    {($list_devices[1].Contains( ":" ))}{$Console.Text = "远程设备，不予以初始化。"}
-                    {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "设备未授权。"}
+                    {($list_devices[1].Contains( ":" ))}{$Console.Text = "远程设备，不予以初始化。";break}
+                    {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "设备未授权。";break}
                 default
                 {
                     $init_1 = adb shell dumpsys batterystats --reset
@@ -40,11 +40,12 @@ Function Init_power
                     {
                         $Console.Text = "初始化失败，请检查手机连接或ADB环境。"
                     }
+                    ;break
                 }
                }
-              }
-            0 { $Console.Text = "没找到设备。" }
-            {$_ -ge 2} { $Console.Text = "连接了太多Android设备啦！" }
+              ;break}
+            0 { $Console.Text = "没找到设备。";break }
+            {$_ -ge 2} { $Console.Text = "连接了太多Android设备啦！";break }
         }
     }
     else
@@ -98,8 +99,8 @@ Function Export_bugreport
 
                     switch ( ( $list_devices ) )
                     {
-                        {$list_devices[1].Contains( ":" )}{$Console.Text = "远程设备，不予以导出日志。"}
-                        {$list_devices[1].Contains( "unauthorized" )}{$Console.Text = "设备未授权。"}
+                        {$list_devices[1].Contains( ":" )}{$Console.Text = "远程设备，不予以导出日志。";break}
+                        {$list_devices[1].Contains( "unauthorized" )}{$Console.Text = "设备未授权。";break}
                         default
                         {
                             $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
@@ -117,6 +118,7 @@ Function Export_bugreport
                             $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
                             $ws = New-Object -ComObject WScript.Shell
                             $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
+                            ;break
                          }
                     }
                 }
@@ -124,9 +126,10 @@ Function Export_bugreport
                 {
                     $Console.Text = "执行失败，请检查手机连接或ADB环境。"
                 }
+                ;break
               }
-            0 { $Console.Text = "没找到设备。" }
-            {$_ -ge 2 } { $Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。" }
+            0 { $Console.Text = "没找到设备。";break }
+            {$_ -ge 2 } { $Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。";break }
         }
     }
     else
@@ -190,10 +193,10 @@ Function Show_devices_info
                     $Info.Text = "执行失败，请检查手机连接或ADB环境。"
                 }
             }
-
+            ;break
           }
-        0 { $Info.Text = "没找到设备。" }
-        {$_ -ge 2 } { $Info.Text = "连了这么多台设备，我哪知道要查哪个。" }
+        0 { $Info.Text = "没找到设备。";break }
+        {$_ -ge 2 } { $Info.Text = "连了这么多台设备，我哪知道要查哪个。";break }
     }
 }
 
@@ -208,10 +211,10 @@ Function Reboot
         {
             1 {
                 adb reboot
-                $Info.Text = "已重启，请检查设备。"
-             }
-            0 { $Info.Text = "没找到设备。" }
-            {$_ -ge 2} {$Info.Text = "连接了太多设备啦！没法重启。"}
+                $Info.Text = "已重启，请检查设备。";break
+              }
+            0 { $Info.Text = "没找到设备。";break }
+            {$_ -ge 2} {$Info.Text = "连接了太多设备啦！没法重启。";break}
         }       
     }
     else
