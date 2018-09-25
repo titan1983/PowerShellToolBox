@@ -295,8 +295,8 @@ Function Connect_devices
 }
 
 Function Do_Connect($ip, $port)
-#TODO:需要增加判断当前IP是否连接成功的判断逻辑
 {
+    $ws = New-Object -ComObject WScript.Shell
     $reg_ip = "^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$"
     $reg_port = "^\d{1,6}$"
     if ( $ip -ne "" )
@@ -306,13 +306,22 @@ Function Do_Connect($ip, $port)
             if ( $port -match $reg_port )
             {
                 $temp_result = adb connect ${ip}:${port}
-                $temp_result
-                $Info.Text = "已连接成功。"
+                if ( $temp_result.Contains( "connected to" ) )
+                {
+                    $Info.Text = "已连接成功。"
+                    $wsr = $ws.popup("已连接成功。",0,$title,0 + 64)
+                    $ConnectForm.Close()
+                }
+                else
+                {
+                    $Info.Text = "连接失败，请检查IP地址、端口号或WIFI设置。"
+                    $wsr = $ws.popup("连接失败，请检查IP地址、端口号或WIFI设置。",0,$title,0 + 64)
+                }
             }
             else
             {
                 $Info.Text = "请填写正确格式的端口号。"
-                $ws = New-Object -ComObject WScript.Shell
+                
 	            $wsr = $ws.popup("请填写正确格式的端口号。",0,$title,0 + 64)
             }
         }
