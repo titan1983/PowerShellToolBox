@@ -19,19 +19,29 @@ Function Init_power
     {
         switch ( ( $device_count = List_devices ) )
 	    {
-            1 {   
-                $init_1 = adb shell dumpsys batterystats --reset
-                $init_2 = adb shell dumpsys batterystats --enable full-wake-history
+            1 {
+                $list_devices = adb devices
+
+                switch ( ($list_devices) )
+                {
+                    {($list_devices[1].Contains( ":" ))}{$Console.Text = "远程设备，不予以初始化。"}
+                    {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "设备未授权。"}
+                default
+                {
+                    $init_1 = adb shell dumpsys batterystats --reset
+                    $init_2 = adb shell dumpsys batterystats --enable full-wake-history
         
-                if ( ( $init_1 -ne $null ) -or ( $init_2 -ne $null ) )
-                {
-                    $Console.Text = [string]$init_1 + "`n" + [string]$init_2
-                    $wsi = $ws.popup($done,0,$title,0 + 64)
+                    if ( ( $init_1 -ne $null ) -or ( $init_2 -ne $null ) )
+                    {
+                        $Console.Text = [string]$init_1 + "`n" + [string]$init_2
+                        $wsi = $ws.popup($done,0,$title,0 + 64)
+                    }
+                    else
+                    {
+                        $Console.Text = "初始化失败，请检查手机连接或ADB环境。"
+                    }
                 }
-                else
-                {
-                    $Console.Text = "初始化失败，请检查手机连接或ADB环境。"
-                }
+               }
               }
             0 { $Console.Text = "没找到设备。" }
             {$_ -ge 2} { $Console.Text = "连接了太多Android设备啦！" }
@@ -48,7 +58,7 @@ Function List_devices
 #这个函数很重要，多处判断均依赖该函数的运行结果。
 #返回已连接Android设备的数量，类型为整形。
 {
-    $list_devices = adb devices
+    $global:list_devices = adb devices
 
     if ( $list_devices -ne $null )
     {
@@ -86,26 +96,28 @@ Function Export_bugreport
                 {
                     $list_devices = adb devices
 
-                    if ( $list_devices[1].Contains( ":" )  )
+                    switch ( ( $list_devices ) )
                     {
-                        $Console.Text = "远程设备，不予以导出日志。"
-                    }
-                    else
-                    {
-                        $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
+                        {$list_devices[1].Contains( ":" )}{$Console.Text = "远程设备，不予以导出日志。"}
+                        {$list_devices[1].Contains( "unauthorized" )}{$Console.Text = "设备未授权。"}
+                        default
+                        {
+                            $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
 
-                        if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
-                        {
-                            adb bugreport
-                        }
-                        else
-                        {
-                            $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
-                            adb bugreport > $filename
-                        }
-                        $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
-                        $ws = New-Object -ComObject WScript.Shell
-                        $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
+                            if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                            {
+                                adb bugreport
+                            }
+                            else
+                            {
+                                $filename = "Bugreport_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
+                                adb bugreport > $filename
+                            }
+
+                            $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
+                            $ws = New-Object -ComObject WScript.Shell
+                            $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
+                         }
                     }
                 }
                 catch [System.Exception]
@@ -152,21 +164,33 @@ Function Run_battery_historian
     }
 }
 
-Function Show_android_version
+Function Show_devices_info
 {
     switch ( ( $device_count = List_devices ) )
     {
         1 {
-            try
-            {
-                $Get_android_ver = adb shell getprop ro.build.version.release
-                $Get_android_API = adb shell getprop ro.build.version.sdk
-                $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API
+            if ( $list_devices[1].Contains("unauthorized") )
+            {    
+                $Info.Text = "设备尚未授权。"
             }
-            catch [System.Exception]
+            else
             {
-                $Info.Text = "执行失败，请检查手机连接或ADB环境。"
+                try
+                {
+                    $Get_android_ver = adb shell getprop ro.build.version.release
+                    $Get_android_API = adb shell getprop ro.build.version.sdk
+                    $Get_screen_res = adb shell wm size
+                    $Get_manuf = adb shell getprop ro.product.manufacturer
+                    $Get_model = adb shell getprop ro.product.model
+                    $Get_CPU = adb shell cat /proc/cpuinfo | findstr " Hardware"
+                    $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API + "`n屏幕分辨率: " + $Get_screen_res + "`n制造商: " + $Get_manuf + "`n型号: " +$Get_model + "`nCPU: " + $Get_CPU.Substring(11)
+                }
+                catch [System.Exception]
+                {
+                    $Info.Text = "执行失败，请检查手机连接或ADB环境。"
+                }
             }
+
           }
         0 { $Info.Text = "没找到设备。" }
         {$_ -ge 2 } { $Info.Text = "连了这么多台设备，我哪知道要查哪个。" }
@@ -212,6 +236,111 @@ Function isRootDirectory
         return 0
     }
     
+}
+
+Function Connect_devices
+{
+    $ConnectForm = New-Object System.Windows.Forms.Form
+    $ConnectForm.Text = $title
+    $ConnectForm.Size = New-Object System.Drawing.Size(300,200) 
+    $ConnectForm.StartPosition = "CenterScreen"
+    $ConnectForm.SizeGripStyle = "Hide"
+    $ConnectForm.MaximizeBox = $false
+    $ConnectForm.MinimizeBox = $false
+    $ConnectForm.AutoSize = $false
+    $ConnectForm.HelpButton = $false
+    $ConnectForm.ShowInTaskbar = $false
+    $ConnectForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Fixed3D
+
+    $IP = New-Object System.Windows.Forms.TextBox
+    $IP.Location = New-Object System.Drawing.Point(15,30) 
+    $IP.Size = New-Object System.Drawing.Size(200,20) 
+    $IP.ReadOnly = $false
+    $IP.Text = ""
+    $IP.WordWrap = $false
+
+    $IP_label = New-Object System.Windows.Forms.Label
+    $IP_label.Location = New-Object System.Drawing.Point(10,10)
+    $IP_label.Size = New-Object System.Drawing.Size(300,20)
+    $IP_label.Text = "请输入正确格式的IP地址："
+
+    $Port_label = New-Object System.Windows.Forms.Label
+    $Port_label.Location = New-Object System.Drawing.Point(10,70)
+    $Port_label.Size = New-Object System.Drawing.Size(300,20)
+    $Port_label.Text = "请输入正确格式的端口号（可选）："
+
+    $Port = New-Object System.Windows.Forms.TextBox
+    $Port.Location = New-Object System.Drawing.Point(15,90) 
+    $Port.Size = New-Object System.Drawing.Size(30,20) 
+    $Port.ReadOnly = $false
+    $Port.Text = "5555"
+    $Port.WordWrap = $false
+
+    $Do_Connect = New-Object System.Windows.Forms.Button
+    $Do_Connect.Location = New-Object System.Drawing.Point(180,100)
+    $Do_Connect.Size = New-Object System.Drawing.Size(80,40)
+    $Do_Connect.Text = "开始连接"
+    $Do_Connect.add_click( {Do_Connect $IP.Text $Port.Text } )
+
+    $ConnectForm.Controls.Add($IP)
+    $ConnectForm.Controls.Add($Port)
+    $ConnectForm.Controls.Add($Do_Connect)
+    $ConnectForm.Controls.Add($IP_label)
+    $ConnectForm.Controls.Add($Port_label)
+
+    $ConnectForm.ShowDialog()
+}
+
+Function Do_Connect($ip, $port)
+#TODO:需要增加判断当前IP是否连接成功的判断逻辑
+{
+    $reg_ip = "^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$"
+    $reg_port = "^\d{1,6}$"
+    if ( $ip -ne "" )
+    {
+        if ( $ip -match $reg_ip )
+        {
+            if ( $port -match $reg_port )
+            {
+                $temp_result = adb connect ${ip}:${port}
+                $temp_result
+                $Info.Text = "已连接成功。"
+            }
+            else
+            {
+                $Info.Text = "请填写正确格式的端口号。"
+                $ws = New-Object -ComObject WScript.Shell
+	            $wsr = $ws.popup("请填写正确格式的端口号。",0,$title,0 + 64)
+            }
+        }
+        else
+        {
+            $Info.Text = "请填写正确格式的IP地址。"
+            $ws = New-Object -ComObject WScript.Shell
+	        $wsr = $ws.popup("请填写正确格式的IP地址。",0,$title,0 + 64)
+        }
+    }
+    else
+    {
+        $Info.Text = "IP地址未填写。"
+        $ws = New-Object -ComObject WScript.Shell
+	    $wsr = $ws.popup("IP地址未填写。",0,$title,0 + 64)
+    }
+}
+
+Function Disconnect
+{
+    try
+    {
+        adb disconnect
+        $Info.Text = "所有连接的远程设备均已断开。"
+        $ws = New-Object -ComObject WScript.Shell
+	    $wsr = $ws.popup("所有连接的远程设备均已断开。",0,$title,0 + 64)
+    }
+    catch [System.Exception]
+    {
+        $Info.Text = "断开异常。"
+    }
 }
 
 Function StartUp
@@ -288,7 +417,7 @@ Function StartUp
     $Run_batt_Button = New-Object System.Windows.Forms.Button
     $Run_batt_Button.Location = New-Object System.Drawing.Point(360,220)
     $Run_batt_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Run_batt_Button.Text = "运行Battery Historian"
+    $Run_batt_Button.Text = "运行`nBattery-Historian"
     $Run_batt_Button.add_click( {Run_battery_historian} )
 
     $Console = New-Object System.Windows.Forms.RichTextBox
@@ -298,12 +427,13 @@ Function StartUp
     $Console.Text = "执行结果显示在这里"
     $Console.WordWrap = $True
 
+
     #以下为tab_adb_tools页的元素
-    $Show_android_version_Button = New-Object System.Windows.Forms.Button
-    $Show_android_version_Button.Location = New-Object System.Drawing.Point(360,40)
-    $Show_android_version_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Show_android_version_Button.Text = "显示Android版本"
-    $Show_android_version_Button.add_click( {Show_android_version} )
+    $Show_devices_info_Button = New-Object System.Windows.Forms.Button
+    $Show_devices_info_Button.Location = New-Object System.Drawing.Point(360,40)
+    $Show_devices_info_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Show_devices_info_Button.Text = "显示设备信息"
+    $Show_devices_info_Button.add_click( {Show_devices_info} )
 
     $Reboot_Button = New-Object System.Windows.Forms.Button
     $Reboot_Button.Location = New-Object System.Drawing.Point(360,100)
@@ -311,12 +441,25 @@ Function StartUp
     $Reboot_Button.Text = "重启Android设备"
     $Reboot_Button.add_click( {Reboot} )
 
+    $Connect_Button = New-Object System.Windows.Forms.Button
+    $Connect_Button.Location = New-Object System.Drawing.Point(360,160)
+    $Connect_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Connect_Button.Text = "远程连接`nAndroid设备"
+    $Connect_Button.add_click( {Connect_devices} )
+
+    $Disconnect_Button = New-Object System.Windows.Forms.Button
+    $Disconnect_Button.Location = New-Object System.Drawing.Point(360,220)
+    $Disconnect_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Disconnect_Button.Text = "断开所有远程设备"
+    $Disconnect_Button.add_click( {Disconnect} )
+
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
     $Info.Size = New-Object System.Drawing.Size(300,200) 
     $Info.ReadOnly = $True
     $Info.Text = "你想看点啥？"
     $Info.WordWrap = $True
+
 
     #以下为主窗体显示元素
     $Time_label = New-Object System.Windows.Forms.Label
@@ -338,9 +481,11 @@ Function StartUp
     $Tab_power.Controls.Add($List_Button)
     $Tab_power.Controls.Add($Run_batt_Button)
 
-    $Tab_adb_tools.Controls.Add($Show_android_version_Button)
+    $Tab_adb_tools.Controls.Add($Show_devices_info_Button)
     $Tab_adb_tools.Controls.Add($Info)
     $Tab_adb_tools.Controls.Add($Reboot_Button)
+    $Tab_adb_tools.Controls.Add($Connect_Button)
+    $Tab_adb_tools.Controls.Add($Disconnect_Button)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
     $result = $MainForm.ShowDialog()
