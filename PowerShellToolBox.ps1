@@ -5,7 +5,8 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 #Global Define
-$title = "PowerShell 懒人工具"
+$Global:title = "PowerShell 懒人工具"
+$Global:version = "1.0.0"
 
 Function Init_power
 {
@@ -355,6 +356,49 @@ Function Disconnect
     }
 }
 
+Function About
+{
+    $AboutForm = New-Object System.Windows.Forms.Form
+    $AboutForm.Text = $title
+    $AboutForm.Size = New-Object System.Drawing.Size(300,160) 
+    $AboutForm.StartPosition = "CenterScreen"
+    $AboutForm.SizeGripStyle = "Hide"
+    $AboutForm.MaximizeBox = $false
+    $AboutForm.MinimizeBox = $false
+    $AboutForm.AutoSize = $false
+    $AboutForm.HelpButton = $false
+    $AboutForm.ShowInTaskbar = $false
+    $AboutForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Fixed3D
+
+    $Author_label = New-Object System.Windows.Forms.Label
+    $Author_label.Location = New-Object System.Drawing.Point(20,80)
+    $Author_label.Size = New-Object System.Drawing.Size(200,20)
+    $Author_label.Text = "作者：田晓东"
+
+    $Version_label = New-Object System.Windows.Forms.Label
+    $Version_label.Location = New-Object System.Drawing.Point(20,50)
+    $Version_label.Size = New-Object System.Drawing.Size(200,20)
+    $Version_label.Text = "版本： " + $Global:version
+
+    $Name_label = New-Object System.Windows.Forms.Label
+    $Name_label.Location = New-Object System.Drawing.Point(20,20)
+    $Name_label.Size = New-Object System.Drawing.Size(200,20)
+    $Name_label.Text = "PowerShell Tool Box"
+
+    $OK_button = New-Object System.Windows.Forms.Button
+    $OK_button.Text = "牛B!!"
+    $OK_button.Location = New-Object System.Drawing.Point(220,80)
+    $OK_button.Size = New-Object System.Drawing.Size(60,40)
+    $OK_button.add_Click({$AboutForm.Close()})
+
+    $AboutForm.Controls.Add($OK_button)
+    $AboutForm.Controls.Add($Author_label)
+    $AboutForm.Controls.Add($Version_label)
+    $AboutForm.Controls.Add($Name_label)
+
+    $AboutForm.ShowDialog()
+}
+
 Function StartUp
 {
     $MainForm = New-Object System.Windows.Forms.Form
@@ -413,12 +457,6 @@ Function StartUp
     $List_Button.Size = New-Object System.Drawing.Size(120,40)
     $List_Button.Text = "已连接Android设备"
     $List_Button.add_click( {List_devices} )
-
-    $Exit_Button = New-Object System.Windows.Forms.Button
-    $Exit_Button.Location = New-Object System.Drawing.Point(380,320)
-    $Exit_Button.Size = New-Object System.Drawing.Size(90,40)
-    $Exit_Button.Text = "退出"
-    $Exit_Button.add_click( { $MainForm.Close() } )
 
     $Export_bugreport_Button = New-Object System.Windows.Forms.Button
     $Export_bugreport_Button.Location = New-Object System.Drawing.Point(360,160)
@@ -479,10 +517,23 @@ Function StartUp
     $Time_label.Size = New-Object System.Drawing.Size(280,20)
     $Time_label.Text = "工具启动于：" + (Get-Date -Format "yyyy年M月d日 dddd H:m:s")
 
+    $Exit_Button = New-Object System.Windows.Forms.Button
+    $Exit_Button.Location = New-Object System.Drawing.Point(380,330)
+    $Exit_Button.Size = New-Object System.Drawing.Size(90,40)
+    $Exit_Button.Text = "退出"
+    $Exit_Button.add_click( { $MainForm.Close() } )
+
+    $About_Button = New-Object System.Windows.Forms.Button
+    $About_Button.Location = New-Object System.Drawing.Point(300,330)
+    $About_Button.Size = New-Object System.Drawing.Size(60,40)
+    $About_Button.Text = "关于"
+    $About_Button.add_click( { About } )
+
     $MainForm.Controls.Add($Exit_Button)
+    $MainForm.Controls.Add($About_Button)
     $MainForm.Controls.Add($Time_label)
     $MainForm.Controls.Add($tabControl)
-
+    
     $tabControl.Controls.Add($Tab_power)
     $tabControl.Controls.Add($Tab_adb_tools)
     #$tabControl.Controls.Add($Tab_logcat)
@@ -492,6 +543,7 @@ Function StartUp
     $Tab_power.Controls.Add($Console)
     $Tab_power.Controls.Add($List_Button)
     $Tab_power.Controls.Add($Run_batt_Button)
+    #$Tab_power.Controls.Add($About_Button)
 
     $Tab_adb_tools.Controls.Add($Show_devices_info_Button)
     $Tab_adb_tools.Controls.Add($Info)
