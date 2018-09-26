@@ -360,7 +360,7 @@ Function About
 {
     $AboutForm = New-Object System.Windows.Forms.Form
     $AboutForm.Text = $title
-    $AboutForm.Size = New-Object System.Drawing.Size(300,160) 
+    $AboutForm.Size = New-Object System.Drawing.Size(300,200) 
     $AboutForm.StartPosition = "CenterScreen"
     $AboutForm.SizeGripStyle = "Hide"
     $AboutForm.MaximizeBox = $false
@@ -391,10 +391,24 @@ Function About
     $OK_button.Size = New-Object System.Drawing.Size(60,40)
     $OK_button.add_Click({$AboutForm.Close()})
 
+    $HomePage_button = New-Object System.Windows.Forms.Button
+    $HomePage_button.Text = "访问项目主页"
+    $HomePage_button.Location = New-Object System.Drawing.Point(20,120)
+    $HomePage_button.Size = New-Object System.Drawing.Size(100,30)
+    $HomePage_button.add_Click({Start-Process -FilePath https://github.com/titan1983/PowerShellToolBox})
+
+    $Mail_button = New-Object System.Windows.Forms.Button
+    $Mail_button.Text = "发个邮件给作者"
+    $Mail_button.Location = New-Object System.Drawing.Point(160,120)
+    $Mail_button.Size = New-Object System.Drawing.Size(100,30)
+    $Mail_button.add_Click({Start-Process -FilePath mailto:titan_1983@163.com})
+
     $AboutForm.Controls.Add($OK_button)
     $AboutForm.Controls.Add($Author_label)
     $AboutForm.Controls.Add($Version_label)
     $AboutForm.Controls.Add($Name_label)
+    $AboutForm.Controls.Add($HomePage_button)
+    $AboutForm.Controls.Add($Mail_button)
 
     $AboutForm.ShowDialog()
 }
