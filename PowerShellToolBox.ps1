@@ -387,7 +387,7 @@ Function About
 
     $OK_button = New-Object System.Windows.Forms.Button
     $OK_button.Text = "牛B!!"
-    $OK_button.Location = New-Object System.Drawing.Point(220,80)
+    $OK_button.Location = New-Object System.Drawing.Point(200,60)
     $OK_button.Size = New-Object System.Drawing.Size(60,40)
     $OK_button.add_Click({$AboutForm.Close()})
 
