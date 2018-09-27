@@ -187,8 +187,9 @@ Function Show_devices_info
                     $Get_manuf = adb shell getprop ro.product.manufacturer
                     $Get_model = adb shell getprop ro.product.model
                     $Get_CPU = adb shell cat /proc/cpuinfo | findstr " Hardware"
+                    $Get_cores = adb shell cat /proc/cpuinfo | findstr "processor"
                     $Get_Mem = adb shell cat /proc/meminfo | findstr " MemTotal"
-                    $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API + "`n屏幕分辨率: " + $Get_screen_res + "`n制造商: " + $Get_manuf + "`n型号: " +$Get_model + "`nCPU: " + $Get_CPU.Substring(11) + "`n物理内存: " + $Get_Mem.Substring(11).trim()
+                    $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API + "`n屏幕分辨率: " + $Get_screen_res + "`n制造商: " + $Get_manuf + "`n型号: " +$Get_model + "`nCPU: " + $Get_CPU.Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + $Get_Mem.Substring(11).trim()
                 }
                 catch [System.Exception]
                 {
