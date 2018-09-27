@@ -187,7 +187,8 @@ Function Show_devices_info
                     $Get_manuf = adb shell getprop ro.product.manufacturer
                     $Get_model = adb shell getprop ro.product.model
                     $Get_CPU = adb shell cat /proc/cpuinfo | findstr " Hardware"
-                    $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API + "`n屏幕分辨率: " + $Get_screen_res + "`n制造商: " + $Get_manuf + "`n型号: " +$Get_model + "`nCPU: " + $Get_CPU.Substring(11)
+                    $Get_Mem = adb shell cat /proc/meminfo | findstr " MemTotal"
+                    $Info.Text = "Android版本: " + $Get_android_ver + "`nAndroid API: " + $Get_android_API + "`n屏幕分辨率: " + $Get_screen_res + "`n制造商: " + $Get_manuf + "`n型号: " +$Get_model + "`nCPU: " + $Get_CPU.Substring(11) + "`n物理内存: " + $Get_Mem.Substring(11).trim()
                 }
                 catch [System.Exception]
                 {
@@ -557,7 +558,6 @@ Function StartUp
     $Tab_power.Controls.Add($Console)
     $Tab_power.Controls.Add($List_Button)
     $Tab_power.Controls.Add($Run_batt_Button)
-    #$Tab_power.Controls.Add($About_Button)
 
     $Tab_adb_tools.Controls.Add($Show_devices_info_Button)
     $Tab_adb_tools.Controls.Add($Info)
