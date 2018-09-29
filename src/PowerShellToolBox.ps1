@@ -6,7 +6,7 @@ Add-Type -AssemblyName System.Drawing
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.1"
+$Global:version = "1.0.2"
 
 Function Init_power
 {
@@ -401,6 +401,27 @@ Function Screen_cap
         }
 }
 
+Function Logcat( $param )
+{
+    $logcatname = "Logcat_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
+    $ws = New-Object -ComObject WScript.Shell
+    switch ( ( $device_count = List_devices ) )
+        {
+            1 {
+                switch ( $param )
+                    {
+                        {$param -eq "snap"}{$Log.Text = adb logcat -d -v time;break}
+                        {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
+                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
+                        default{$Log.Text = "?????"}
+                    };break
+              }
+            0 { $Log.Text = "没找到设备。";break }
+            {$_ -ge 2} {$Log.Text = "连接了太多设备啦！。";break}
+        } 
+    
+}
+
 Function About
 {
     $AboutForm = New-Object System.Windows.Forms.Form
@@ -582,8 +603,32 @@ Function StartUp
     $Info.BackColor = ([System.Drawing.Color]::Black)
 
     #以下为tab_logcat页的元素
+    $Log = New-Object System.Windows.Forms.RichTextBox
+    $Log.Location = New-Object System.Drawing.Point(20,60) 
+    $Log.Size = New-Object System.Drawing.Size(450,230) 
+    $Log.ReadOnly = $True
+    $Log.Text = "==== Logcat快照 ===="
+    $Log.WordWrap = $True
+    $Log.ForeColor = ([System.Drawing.Color]::LawnGreen)
+    $Log.BackColor = ([System.Drawing.Color]::Black)
 
+    $Log_snap_Button = New-Object System.Windows.Forms.Button
+    $Log_snap_Button.Location = New-Object System.Drawing.Point(20,10)
+    $Log_snap_Button.Size = New-Object System.Drawing.Size(100,40)
+    $Log_snap_Button.Text = "抓取LOGCAT快照"
+    $Log_snap_Button.add_click( {Logcat "snap"} )
 
+    $Log_clear_Button = New-Object System.Windows.Forms.Button
+    $Log_clear_Button.Location = New-Object System.Drawing.Point(140,10)
+    $Log_clear_Button.Size = New-Object System.Drawing.Size(100,40)
+    $Log_clear_Button.Text = "清除LOGCAT日志"
+    $Log_clear_Button.add_click( {Logcat "clear"} )
+
+    $Log_export_Button = New-Object System.Windows.Forms.Button
+    $Log_export_Button.Location = New-Object System.Drawing.Point(260,10)
+    $Log_export_Button.Size = New-Object System.Drawing.Size(100,40)
+    $Log_export_Button.Text = "导出LOGCAT日志"
+    $Log_export_Button.add_click( {Logcat "export"} )
 
     #以下为tab_option页的元素
     $Home_Button = New-Object System.Windows.Forms.Button
@@ -690,7 +735,7 @@ Function StartUp
     
     $tabControl.Controls.Add($Tab_power)
     $tabControl.Controls.Add($Tab_adb_tools)
-    #$tabControl.Controls.Add($Tab_logcat)
+    $tabControl.Controls.Add($Tab_logcat)
     $tabControl.Controls.Add($Tab_option)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
@@ -704,6 +749,11 @@ Function StartUp
     $Tab_adb_tools.Controls.Add($Reboot_Button)
     $Tab_adb_tools.Controls.Add($Connect_Button)
     $Tab_adb_tools.Controls.Add($Disconnect_Button)
+
+    $Tab_logcat.Controls.Add($Log)
+    $Tab_logcat.Controls.Add($Log_snap_Button)
+    $Tab_logcat.Controls.Add($Log_clear_Button)
+    $Tab_logcat.Controls.Add($Log_export_Button)
 
     $Tab_option.Controls.Add($Home_Button)
     $Tab_option.Controls.Add($Back_Button)
