@@ -531,6 +531,8 @@ Function StartUp
     $Console.ReadOnly = $True
     $Console.Text = "执行结果显示在这里"
     $Console.WordWrap = $True
+    $Console.ForeColor = ([System.Drawing.Color]::LawnGreen)
+    $Console.BackColor = ([System.Drawing.Color]::Black)
 
 
     #以下为tab_adb_tools页的元素
@@ -560,10 +562,12 @@ Function StartUp
 
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
-    $Info.Size = New-Object System.Drawing.Size(300,200) 
+    $Info.Size = New-Object System.Drawing.Size(300,240) 
     $Info.ReadOnly = $True
     $Info.Text = "你想看点啥？"
     $Info.WordWrap = $True
+    $Info.ForeColor = ([System.Drawing.Color]::LawnGreen)
+    $Info.BackColor = ([System.Drawing.Color]::Black)
 
     #以下为tab_logcat页的元素
 
