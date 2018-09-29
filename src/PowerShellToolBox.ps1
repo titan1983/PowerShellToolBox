@@ -6,7 +6,7 @@ Add-Type -AssemblyName System.Drawing
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.0"
+$Global:version = "1.0.1"
 
 Function Init_power
 {
@@ -358,6 +358,37 @@ Function Disconnect
     }
 }
 
+Function Press_key($keycode)
+{
+    switch ( ( $device_count = List_devices ) )
+	    {
+            1 {$Warning_label.Text = "";adb shell input keyevent $keycode;break}
+            0 { $Warning_label.Text = "没找到设备。";break }
+            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+        }
+}
+
+Function Swipe_screen($start_x, $start_y, $end_x, $end_y)
+{
+    switch ( ( $device_count = List_devices ) )
+	    {
+            1 {$Warning_label.Text = "";adb shell input swipe $start_x $start_y $end_x $end_y;break}
+            0 { $Warning_label.Text = "没找到设备。";break }
+            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+        }
+}
+
+Function Screen_cap
+{
+    $imagename = "Screenshot_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".png"
+    switch ( ( $device_count = List_devices ) )
+	    {
+            1 {$Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; break}
+            0 { $Warning_label.Text = "没找到设备。";break }
+            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+        }
+}
+
 Function About
 {
     $AboutForm = New-Object System.Windows.Forms.Form
@@ -438,6 +469,7 @@ Function StartUp
     $Tab_power = New-Object System.Windows.Forms.TabPage
     $Tab_adb_tools = New-Object System.Windows.Forms.TabPage
     $Tab_logcat = New-Object System.Windows.Forms.TabPage
+    $Tab_option = New-Object System.Windows.Forms.TabPage
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
@@ -459,6 +491,13 @@ Function StartUp
     $Tab_logcat.TabIndex = 0;
     $Tab_logcat.Text = "Logcat快照";
     $Tab_logcat.UseVisualStyleBackColor = "true";
+
+    $Tab_option.Location = New-Object System.Drawing.Point(4, 22);
+    $Tab_option.Padding = New-Object System.Windows.Forms.Padding(3);
+    $Tab_option.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_option.TabIndex = 0;
+    $Tab_option.Text = "手机模拟操作";
+    $Tab_option.UseVisualStyleBackColor = "true";
 
 
     #以下为tab_power页的元素
@@ -526,6 +565,89 @@ Function StartUp
     $Info.Text = "你想看点啥？"
     $Info.WordWrap = $True
 
+    #以下为tab_logcat页的元素
+
+
+
+    #以下为tab_option页的元素
+    $Home_Button = New-Object System.Windows.Forms.Button
+    $Home_Button.Location = New-Object System.Drawing.Point(140,240)
+    $Home_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Home_Button.Text = "Home"
+    $Home_Button.add_click( {Press_key 3} )
+
+    $Back_Button = New-Object System.Windows.Forms.Button
+    $Back_Button.Location = New-Object System.Drawing.Point(50,240)
+    $Back_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Back_Button.Text = "Back"
+    $Back_Button.add_click( {Press_key 4} )
+
+    $Menu_Button = New-Object System.Windows.Forms.Button
+    $Menu_Button.Location = New-Object System.Drawing.Point(230,240)
+    $Menu_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Menu_Button.Text = "Menu"
+    $Menu_Button.add_click( {Press_key 82} )
+
+    $Power_Button = New-Object System.Windows.Forms.Button
+    $Power_Button.Location = New-Object System.Drawing.Point(360,60)
+    $Power_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Power_Button.Text = "Power"
+    $Power_Button.add_click( {Press_key 26} )
+
+    $Vol_up_Button = New-Object System.Windows.Forms.Button
+    $Vol_up_Button.Location = New-Object System.Drawing.Point(360,100)
+    $Vol_up_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Vol_up_Button.Text = "Volumn +"
+    $Vol_up_Button.add_click( {Press_key 24} )
+
+    $Vol_down_Button = New-Object System.Windows.Forms.Button
+    $Vol_down_Button.Location = New-Object System.Drawing.Point(360,140)
+    $Vol_down_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Vol_down_Button.Text = "Volumn -"
+    $Vol_down_Button.add_click( {Press_key 25} )
+
+    $Swipe_up_Button = New-Object System.Windows.Forms.Button
+    $Swipe_up_Button.Location = New-Object System.Drawing.Point(140,40)
+    $Swipe_up_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_up_Button.Text = "向上滑动"
+    $Swipe_up_Button.add_click( {Swipe_screen 500 800 500 200} )
+
+    $Swipe_down_Button = New-Object System.Windows.Forms.Button
+    $Swipe_down_Button.Location = New-Object System.Drawing.Point(140,160)
+    $Swipe_down_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_down_Button.Text = "向下滑动"
+    $Swipe_down_Button.add_click( {Swipe_screen 500 300 500 800} )
+
+    $Swipe_left_Button = New-Object System.Windows.Forms.Button
+    $Swipe_left_Button.Location = New-Object System.Drawing.Point(40,100)
+    $Swipe_left_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_left_Button.Text = "向左滑动"
+    $Swipe_left_Button.add_click( {Swipe_screen 500 500 100 500} )
+
+    $Swipe_right_Button = New-Object System.Windows.Forms.Button
+    $Swipe_right_Button.Location = New-Object System.Drawing.Point(240,100)
+    $Swipe_right_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_right_Button.Text = "向右滑动"
+    $Swipe_right_Button.add_click( {Swipe_screen 100 500 500 500} )
+
+    $Screen_cap_Button = New-Object System.Windows.Forms.Button
+    $Screen_cap_Button.Location = New-Object System.Drawing.Point(140,100)
+    $Screen_cap_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Screen_cap_Button.Text = "屏幕截图"
+    $Screen_cap_Button.add_click( {Screen_cap} )
+
+    $Menu_Button = New-Object System.Windows.Forms.Button
+    $Menu_Button.Location = New-Object System.Drawing.Point(230,240)
+    $Menu_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Menu_Button.Text = "Menu"
+    $Menu_Button.add_click( {Press_key 82} )
+
+    $Warning_label = New-Object System.Windows.Forms.Label
+    $Warning_label.Location = New-Object System.Drawing.Point(20,10)
+    $Warning_label.Size = New-Object System.Drawing.Size(300,20)
+    $Warning_label.Text = ""
+    $Warning_label.ForeColor = "Red"
+    $Warning_label.Font = New-Object System.Drawing.Font("Tahoma",10,[System.Drawing.FontStyle]::Bold)
 
     #以下为主窗体显示元素
     $Time_label = New-Object System.Windows.Forms.Label
@@ -553,6 +675,7 @@ Function StartUp
     $tabControl.Controls.Add($Tab_power)
     $tabControl.Controls.Add($Tab_adb_tools)
     #$tabControl.Controls.Add($Tab_logcat)
+    $tabControl.Controls.Add($Tab_option)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
     $Tab_power.Controls.Add($Init_Button)
@@ -565,6 +688,19 @@ Function StartUp
     $Tab_adb_tools.Controls.Add($Reboot_Button)
     $Tab_adb_tools.Controls.Add($Connect_Button)
     $Tab_adb_tools.Controls.Add($Disconnect_Button)
+
+    $Tab_option.Controls.Add($Home_Button)
+    $Tab_option.Controls.Add($Back_Button)
+    $Tab_option.Controls.Add($Menu_Button)
+    $Tab_option.Controls.Add($Power_Button)
+    $Tab_option.Controls.Add($Vol_up_Button)
+    $Tab_option.Controls.Add($Vol_down_Button)
+    $Tab_option.Controls.Add($Swipe_up_Button)
+    $Tab_option.Controls.Add($Swipe_down_Button)
+    $Tab_option.Controls.Add($Swipe_left_Button)
+    $Tab_option.Controls.Add($Swipe_right_Button)
+    $Tab_option.Controls.Add($Warning_label)
+    $Tab_option.Controls.Add($Screen_cap_Button)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
     $result = $MainForm.ShowDialog()
