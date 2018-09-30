@@ -227,24 +227,6 @@ Function Reboot
     }
 }
 
-Function isRootDirectory
-{
-    $path_per = Get-Location
-    cd /
-    $path_after = Get-Location
-
-    if ( [String]($path_per) -eq [String]($path_after) )
-    {
-        return 1
-    }
-    else
-    {
-        cd $path_per
-        return 0
-    }
-    
-}
-
 Function isNull($target)
 {
     if ( $target -ne $null )
