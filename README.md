@@ -5,6 +5,19 @@
 <br>把Android移动测试日常工作中常用的功能和需求整合至一个小工具内，方便使用。
 <br>注意，此工具基于微软的PowerShell脚本语言所写，故`只支持Windows系统`，且最低系统要求是Win7。
 
+## PowerShellToolBox有哪些功能？
+
+* 便捷的Android设备功耗评测辅助功能
+    *  功耗评测一键初始化，节省操作时间
+    *  导出Bugreport日志文件，方便分析排查
+    *  一键式启动Battery-Historian工具，把测试人员从繁琐的键盘命令中解放出来
+* 为常用ADB命令提供`图形界面（GUI）`，Android测试不再手忙脚乱
+* 方便的设备信息检测功能
+* 提供`基础的手机模拟操作`，懒癌晚期测试人员的福音
+* 查看并导出`LOGCAT`日志
+* 一键重启，一键清空，各种`一键式操作`
+* 更多功能正在优雅的赶来……
+
 ## 系统要求
 * Win7或以上系统
 * 完整的adb环境
@@ -23,18 +36,6 @@
 <b>*64位系统：</b>
 [PowerShellToolBox_64bit](https://raw.githubusercontent.com/titan1983/PowerShellToolBox/master/bin/PowerShellToolBox_64bit.exe)
 
-## PowerShellToolBox有哪些功能？
-
-* 便捷的Android设备功耗评测辅助功能
-    *  功耗评测一键初始化，节省操作时间
-    *  导出Bugreport日志文件，方便分析排查
-    *  一键式启动Battery-Historian工具，把测试人员从繁琐的键盘命令中解放出来
-* 为常用ADB命令提供`图形界面（GUI）`，Android测试不再手忙脚乱
-* 方便的设备信息检测功能
-* 提供`基础的手机模拟操作`，懒癌晚期测试人员的福音
-* 查看并导出`LOGCAT`日志
-* 一键重启，一键清空，各种`一键式操作`
-* 更多功能正在优雅的赶来……
 
 ## 问题反馈
 在使用中如有任何问题，欢迎反馈给我，可以用以下联系方式跟我交流
