@@ -375,10 +375,11 @@ Function Swipe_screen($start_x, $start_y, $end_x, $end_y)
 
 Function Screen_cap
 {
+    $ws = New-Object -ComObject WScript.Shell
     $imagename = "Screenshot_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".png"
     switch ( ( $device_count = List_devices ) )
 	    {
-            1 {$Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; break}
+            1 {$Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; $wsr = $ws.popup( "截屏成功！图片保存在" + (Get-Location) + "\" + $imagename,0,$title,0 + 64); break}
             0 { $Warning_label.Text = "没找到设备。";break }
             {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
         }
