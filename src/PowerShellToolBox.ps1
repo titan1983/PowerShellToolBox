@@ -6,7 +6,7 @@ Add-Type -AssemblyName System.Drawing
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.2"
+$Global:version = "1.0.3"
 
 Function Init_power
 {
@@ -406,6 +406,7 @@ Function Logcat( $param )
                         {$param -eq "snap"}{$Log.Text = adb logcat -d -v time;break}
                         {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
                         {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
+                        {$param -eq "trace"}{adb pull /data/anr/traces.txt;$Log.Text = ("ANR trace文件已导出。`n已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("ANR trace文件已导出",0,$title,0 + 64);break}
                         default{$Log.Text = "?????"}
                     };break
               }
@@ -623,6 +624,12 @@ Function StartUp
     $Log_export_Button.Text = "导出LOGCAT日志"
     $Log_export_Button.add_click( {Logcat "export"} )
 
+    $Trace_export_Button = New-Object System.Windows.Forms.Button
+    $Trace_export_Button.Location = New-Object System.Drawing.Point(380,10)
+    $Trace_export_Button.Size = New-Object System.Drawing.Size(100,40)
+    $Trace_export_Button.Text = "导出trace文件"
+    $Trace_export_Button.add_click( {Logcat "trace"} )
+
     #以下为tab_option页的元素
     $Home_Button = New-Object System.Windows.Forms.Button
     $Home_Button.Location = New-Object System.Drawing.Point(140,240)
@@ -747,6 +754,7 @@ Function StartUp
     $Tab_logcat.Controls.Add($Log_snap_Button)
     $Tab_logcat.Controls.Add($Log_clear_Button)
     $Tab_logcat.Controls.Add($Log_export_Button)
+    $Tab_logcat.Controls.Add($Trace_export_Button)
 
     $Tab_option.Controls.Add($Home_Button)
     $Tab_option.Controls.Add($Back_Button)
