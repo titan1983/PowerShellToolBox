@@ -409,7 +409,12 @@ Function Logcat( $param )
                         {$param -eq "trace"}{
                                                 $trace_result = adb shell ls /data/anr
 
-                                                for ($i = 0;$i -lt $result.Length;$i++)
+                                                if ($trace_result -eq $null)
+                                                {
+                                                    $Log.Text = "访问被拒绝，无权限。";break
+                                                }
+
+                                                for ($i = 0;$i -lt $trace_result.Length;$i++)
                                                 {
                                                     if ($trace_result[$i].toString() -eq "traces.txt")
                                                     {
