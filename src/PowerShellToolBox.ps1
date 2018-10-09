@@ -406,7 +406,27 @@ Function Logcat( $param )
                         {$param -eq "snap"}{$Log.Text = adb logcat -d -v time;break}
                         {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
                         {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
-                        {$param -eq "trace"}{adb pull /data/anr/traces.txt;$Log.Text = ("ANR trace文件已导出。`n已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("ANR trace文件已导出",0,$title,0 + 64);break}
+                        {$param -eq "trace"}{
+                                                $result = adb shell ls /data/anr
+
+                                                for ($i = 0;$i -lt $result.Length;$i++)
+                                                {
+                                                    if ($result[$i].toString() -eq "traces.txt")
+                                                    {
+                                                        adb pull /data/anr/traces.txt
+                                                        $Log.Text = ("ANR trace文件已导出。`n已导出至:`n" + (Get-Location) + "\traces.txt");$wsr = $ws.popup("ANR trace文件已导出",0,$title,0 + 64);break
+                                                    }
+                                                    elseif ($result[$i].toString() -eq "traces.txt.bugreport")
+                                                    {
+                                                        adb pull /data/anr/traces.txt.bugreport
+                                                        $Log.Text = ("trace文件不存在，导出trace.txt.bugreport文件。`n已导出至:`n" + (Get-Location) + "\traces.txt.bugreport");$wsr = $ws.popup("trace.txt.bugreport文件已导出",0,$title,0 + 64);break
+                                                    }
+                                                    else
+                                                    {
+                                                        $Log.Text = "trace文件不存在，请检查其是否生成或是否有相应权限。";break
+                                                    }
+                                                };break
+                                            }
                         default{$Log.Text = "?????"}
                     };break
               }
