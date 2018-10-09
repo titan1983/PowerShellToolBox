@@ -436,7 +436,7 @@ Function Logcat( $param )
                     };break
               }
             0 { $Log.Text = "没找到设备。";break }
-            {$_ -ge 2} {$Log.Text = "连接了太多设备啦！。";break}
+            {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
         } 
     
 }
@@ -626,7 +626,7 @@ Function StartUp
     $Log.Location = New-Object System.Drawing.Point(20,60) 
     $Log.Size = New-Object System.Drawing.Size(450,230) 
     $Log.ReadOnly = $True
-    $Log.Text = "==== Logcat快照 ===="
+    $Log.Text = "==== LogCat快照 ===="
     $Log.WordWrap = $True
     $Log.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Log.BackColor = ([System.Drawing.Color]::Black)
