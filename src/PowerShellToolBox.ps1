@@ -142,6 +142,7 @@ Function Export_bugreport
 
 Function Run_battery_historian
 {
+    $temp_dir = Get-Location
 
     if ( get-process | where-object {$_.Name -eq "battery-historian"} )
     {
@@ -166,6 +167,7 @@ Function Run_battery_historian
         {
             $Console.Text = "工具都没装你运行个毛线！"
         }
+        cd $temp_dir
     }
 }
 
@@ -185,12 +187,13 @@ Function Show_devices_info
                     $Get_android_ver = adb shell getprop ro.build.version.release
                     $Get_android_API = adb shell getprop ro.build.version.sdk
                     $Get_screen_res = adb shell wm size
+                    $Get_screen_dpi = adb shell wm density
                     $Get_manuf = adb shell getprop ro.product.manufacturer
                     $Get_model = adb shell getprop ro.product.model
                     $Get_CPU = adb shell cat /proc/cpuinfo | findstr "Hardware"
                     $Get_cores = adb shell cat /proc/cpuinfo | findstr "processor"
                     $Get_Mem = adb shell cat /proc/meminfo | findstr "MemTotal"
-                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim()
+                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n屏幕DPI: " + (isNull $Get_screen_dpi) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim()
                 }
                 catch [System.Exception]
                 {
@@ -272,7 +275,7 @@ Function Connect_devices
 
     $Port = New-Object System.Windows.Forms.TextBox
     $Port.Location = New-Object System.Drawing.Point(15,90) 
-    $Port.Size = New-Object System.Drawing.Size(30,20) 
+    $Port.Size = New-Object System.Drawing.Size(40,20) 
     $Port.ReadOnly = $false
     $Port.Text = "5555"
     $Port.WordWrap = $false
@@ -405,7 +408,7 @@ Function Logcat( $param )
                     {
                         {$param -eq "snap"}{$Log.Text = adb logcat -d -v time;break}
                         {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
-                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
+                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + "\" + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
                         {$param -eq "trace"}{
                                                 $trace_result = adb shell ls /data/anr
 
@@ -522,6 +525,7 @@ Function StartUp
     $Tab_adb_tools = New-Object System.Windows.Forms.TabPage
     $Tab_logcat = New-Object System.Windows.Forms.TabPage
     $Tab_option = New-Object System.Windows.Forms.TabPage
+    $Tab_apk_info = New-Object System.Windows.Forms.TabPage
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
@@ -551,6 +555,13 @@ Function StartUp
     $Tab_option.Text = "手机模拟操作";
     $Tab_option.UseVisualStyleBackColor = "true";
 
+    $Tab_apk_info.Location = New-Object System.Drawing.Point(4, 22);
+    $Tab_apk_info.Padding = New-Object System.Windows.Forms.Padding(3);
+    $Tab_apk_info.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_apk_info.TabIndex = 0;
+    $Tab_apk_info.Text = "APK信息查询";
+    $Tab_apk_info.UseVisualStyleBackColor = "true";
+    $Tab_apk_info.AllowDrop = $True
 
     #以下为tab_power页的元素
     $Init_Button = New-Object System.Windows.Forms.Button
@@ -762,6 +773,7 @@ Function StartUp
     $tabControl.Controls.Add($Tab_adb_tools)
     $tabControl.Controls.Add($Tab_logcat)
     $tabControl.Controls.Add($Tab_option)
+    #$tabControl.Controls.Add($Tab_apk_info)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
     $Tab_power.Controls.Add($Init_Button)
@@ -795,7 +807,7 @@ Function StartUp
     $Tab_option.Controls.Add($Screen_cap_Button)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
-    $result = $MainForm.ShowDialog()
+    $MainForm.ShowDialog()
 }
 
 StartUp
