@@ -6,7 +6,7 @@ Add-Type -AssemblyName System.Drawing
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.3"
+$Global:version = "1.0.4"
 
 Function Init_power
 {
@@ -515,7 +515,7 @@ Function StartUp
 {
     $MainForm = New-Object System.Windows.Forms.Form
     $MainForm.Text = $title
-    $MainForm.Size = New-Object System.Drawing.Size(520,420) 
+    $MainForm.Size = New-Object System.Drawing.Size(720,520) 
     $MainForm.StartPosition = "CenterScreen"
     $MainForm.SizeGripStyle = "Hide"
     $MainForm.MaximizeBox = $false
@@ -528,7 +528,7 @@ Function StartUp
     $tabControl = New-Object System.Windows.Forms.TabControl
     $tabControl.Location = New-Object System.Drawing.Point(0, 10);
     $tabControl.SelectedIndex = 0;
-    $tabControl.Size = New-Object System.Drawing.Size(500, 400);
+    $tabControl.Size = New-Object System.Drawing.Size(700, 400);
     $tabControl.TabIndex = 0
 
     $Tab_power = New-Object System.Windows.Forms.TabPage
@@ -539,35 +539,35 @@ Function StartUp
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
-    $Tab_power.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_power.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_power.TabIndex = 0;
     $Tab_power.Text = "功耗评测相关";
     $Tab_power.UseVisualStyleBackColor = "true";
 
     $Tab_adb_tools.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_adb_tools.Padding = New-Object System.Windows.Forms.Padding(3);
-    $Tab_adb_tools.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_adb_tools.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_adb_tools.TabIndex = 0;
     $Tab_adb_tools.Text = "ADB常用工具";
     $Tab_adb_tools.UseVisualStyleBackColor = "true";
 
     $Tab_logcat.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_logcat.Padding = New-Object System.Windows.Forms.Padding(3);
-    $Tab_logcat.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_logcat.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_logcat.TabIndex = 0;
     $Tab_logcat.Text = "Logcat快照";
     $Tab_logcat.UseVisualStyleBackColor = "true";
 
     $Tab_option.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_option.Padding = New-Object System.Windows.Forms.Padding(3);
-    $Tab_option.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_option.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_option.TabIndex = 0;
     $Tab_option.Text = "手机模拟操作";
     $Tab_option.UseVisualStyleBackColor = "true";
 
     $Tab_apk_info.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_apk_info.Padding = New-Object System.Windows.Forms.Padding(3);
-    $Tab_apk_info.Size = New-Object System.Drawing.Size(500, 400);
+    $Tab_apk_info.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_apk_info.TabIndex = 0;
     $Tab_apk_info.Text = "APK信息查询";
     $Tab_apk_info.UseVisualStyleBackColor = "true";
@@ -575,77 +575,78 @@ Function StartUp
 
     #以下为tab_power页的元素
     $Init_Button = New-Object System.Windows.Forms.Button
-    $Init_Button.Location = New-Object System.Drawing.Point(360,40)
+    $Init_Button.Location = New-Object System.Drawing.Point(560,40)
     $Init_Button.Size = New-Object System.Drawing.Size(120,40)
     $Init_Button.Text = "功耗评测初始化"
     $Init_Button.add_click( {Init_power} )
 
     $List_Button = New-Object System.Windows.Forms.Button
-    $List_Button.Location = New-Object System.Drawing.Point(360,100)
+    $List_Button.Location = New-Object System.Drawing.Point(560,100)
     $List_Button.Size = New-Object System.Drawing.Size(120,40)
     $List_Button.Text = "已连接Android设备"
     $List_Button.add_click( {List_devices} )
 
     $Export_bugreport_Button = New-Object System.Windows.Forms.Button
-    $Export_bugreport_Button.Location = New-Object System.Drawing.Point(360,160)
+    $Export_bugreport_Button.Location = New-Object System.Drawing.Point(560,160)
     $Export_bugreport_Button.Size = New-Object System.Drawing.Size(120,40)
     $Export_bugreport_Button.Text = "导出Bugreport日志"
     $Export_bugreport_Button.add_click( {Export_bugreport} )
 
     $Run_batt_Button = New-Object System.Windows.Forms.Button
-    $Run_batt_Button.Location = New-Object System.Drawing.Point(360,220)
+    $Run_batt_Button.Location = New-Object System.Drawing.Point(560,220)
     $Run_batt_Button.Size = New-Object System.Drawing.Size(120,40)
     $Run_batt_Button.Text = "运行`nBattery-Historian"
     $Run_batt_Button.add_click( {Run_battery_historian} )
 
     $Console = New-Object System.Windows.Forms.RichTextBox
     $Console.Location = New-Object System.Drawing.Point(20,40) 
-    $Console.Size = New-Object System.Drawing.Size(300,240) 
+    $Console.Size = New-Object System.Drawing.Size(500,340) 
     $Console.ReadOnly = $True
     $Console.Text = "执行结果显示在这里"
     $Console.WordWrap = $True
     $Console.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Console.BackColor = ([System.Drawing.Color]::Black)
-
+    $Console.Font = New-Object System.Drawing.Font("Microsoft YaHei",16,[System.Drawing.FontStyle]::Regular)
 
     #以下为tab_adb_tools页的元素
     $Show_devices_info_Button = New-Object System.Windows.Forms.Button
-    $Show_devices_info_Button.Location = New-Object System.Drawing.Point(360,40)
+    $Show_devices_info_Button.Location = New-Object System.Drawing.Point(560,40)
     $Show_devices_info_Button.Size = New-Object System.Drawing.Size(120,40)
     $Show_devices_info_Button.Text = "显示设备信息"
     $Show_devices_info_Button.add_click( {Show_devices_info} )
 
     $Reboot_Button = New-Object System.Windows.Forms.Button
-    $Reboot_Button.Location = New-Object System.Drawing.Point(360,100)
+    $Reboot_Button.Location = New-Object System.Drawing.Point(560,100)
     $Reboot_Button.Size = New-Object System.Drawing.Size(120,40)
     $Reboot_Button.Text = "重启Android设备"
     $Reboot_Button.add_click( {Reboot} )
 
     $Connect_Button = New-Object System.Windows.Forms.Button
-    $Connect_Button.Location = New-Object System.Drawing.Point(360,160)
+    $Connect_Button.Location = New-Object System.Drawing.Point(560,160)
     $Connect_Button.Size = New-Object System.Drawing.Size(120,40)
     $Connect_Button.Text = "远程连接`nAndroid设备"
     $Connect_Button.add_click( {Connect_devices} )
 
     $Disconnect_Button = New-Object System.Windows.Forms.Button
-    $Disconnect_Button.Location = New-Object System.Drawing.Point(360,220)
+    $Disconnect_Button.Location = New-Object System.Drawing.Point(560,220)
     $Disconnect_Button.Size = New-Object System.Drawing.Size(120,40)
     $Disconnect_Button.Text = "断开所有远程设备"
     $Disconnect_Button.add_click( {Disconnect} )
 
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
-    $Info.Size = New-Object System.Drawing.Size(300,240) 
+    $Info.Size = New-Object System.Drawing.Size(500,340) 
     $Info.ReadOnly = $True
     $Info.Text = "你想看点啥？"
     $Info.WordWrap = $True
     $Info.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Info.BackColor = ([System.Drawing.Color]::Black)
+    $Info.Font = New-Object System.Drawing.Font("Microsoft YaHei",16,[System.Drawing.FontStyle]::Regular)
 
     #以下为tab_logcat页的元素
     $Log = New-Object System.Windows.Forms.RichTextBox
     $Log.Location = New-Object System.Drawing.Point(20,60) 
-    $Log.Size = New-Object System.Drawing.Size(450,230) 
+    $Log.Size = New-Object System.Drawing.Size(650,280) 
     $Log.ReadOnly = $True
     $Log.Text = "==== LogCat快照 ===="
     $Log.WordWrap = $True
@@ -659,136 +660,131 @@ Function StartUp
     $Log_snap_Button.add_click( {Logcat "snap"} )
 
     $Log_clear_Button = New-Object System.Windows.Forms.Button
-    $Log_clear_Button.Location = New-Object System.Drawing.Point(140,10)
+    $Log_clear_Button.Location = New-Object System.Drawing.Point(160,10)
     $Log_clear_Button.Size = New-Object System.Drawing.Size(100,40)
     $Log_clear_Button.Text = "清除LOGCAT日志"
     $Log_clear_Button.add_click( {Logcat "clear"} )
 
     $Log_export_Button = New-Object System.Windows.Forms.Button
-    $Log_export_Button.Location = New-Object System.Drawing.Point(260,10)
+    $Log_export_Button.Location = New-Object System.Drawing.Point(300,10)
     $Log_export_Button.Size = New-Object System.Drawing.Size(100,40)
     $Log_export_Button.Text = "导出LOGCAT日志"
     $Log_export_Button.add_click( {Logcat "export"} )
 
     $Trace_export_Button = New-Object System.Windows.Forms.Button
-    $Trace_export_Button.Location = New-Object System.Drawing.Point(380,10)
+    $Trace_export_Button.Location = New-Object System.Drawing.Point(440,10)
     $Trace_export_Button.Size = New-Object System.Drawing.Size(100,40)
     $Trace_export_Button.Text = "导出trace文件"
     $Trace_export_Button.add_click( {Logcat "trace"} )
 
     $Log_filter_Button = New-Object System.Windows.Forms.Button
-    $Log_filter_Button.Location = New-Object System.Drawing.Point(20,290)
-    $Log_filter_Button.Size = New-Object System.Drawing.Size(60,28)
+    $Log_filter_Button.Location = New-Object System.Drawing.Point(20,340)
+    $Log_filter_Button.Size = New-Object System.Drawing.Size(60,30)
     $Log_filter_Button.Text = "过滤"
     $Log_filter_Button.add_click( {FilterLog $Filter_box.Text.toString()} )
 
     $Filter_box = New-Object System.Windows.Forms.RichTextBox
-    $Filter_box.Location = New-Object System.Drawing.Point(100,290) 
-    $Filter_box.Size = New-Object System.Drawing.Size(180,28) 
+    $Filter_box.Location = New-Object System.Drawing.Point(100,340) 
+    $Filter_box.Size = New-Object System.Drawing.Size(400,30) 
     $Filter_box.ReadOnly = $false
     $Filter_box.Text = ""
     $Filter_box.WordWrap = $false
     $Filter_box.ForeColor = ([System.Drawing.Color]::Orange)
     $Filter_box.BackColor = ([System.Drawing.Color]::Blue)
-    $Filter_box.Font = New-Object System.Drawing.Font("Tahoma",8,[System.Drawing.FontStyle]::Bold)
+    $Filter_box.Font = New-Object System.Drawing.Font("Tahoma",12,[System.Drawing.FontStyle]::Bold)
 
     #以下为tab_option页的元素
     $Home_Button = New-Object System.Windows.Forms.Button
-    $Home_Button.Location = New-Object System.Drawing.Point(140,240)
-    $Home_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Home_Button.Location = New-Object System.Drawing.Point(200,300)
+    $Home_Button.Size = New-Object System.Drawing.Size(100,40)
     $Home_Button.Text = "Home"
     $Home_Button.add_click( {Press_key 3} )
 
     $Back_Button = New-Object System.Windows.Forms.Button
-    $Back_Button.Location = New-Object System.Drawing.Point(50,240)
-    $Back_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Back_Button.Location = New-Object System.Drawing.Point(80,300)
+    $Back_Button.Size = New-Object System.Drawing.Size(100,40)
     $Back_Button.Text = "Back"
     $Back_Button.add_click( {Press_key 4} )
 
     $Menu_Button = New-Object System.Windows.Forms.Button
-    $Menu_Button.Location = New-Object System.Drawing.Point(230,240)
-    $Menu_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Menu_Button.Location = New-Object System.Drawing.Point(320,300)
+    $Menu_Button.Size = New-Object System.Drawing.Size(100,40)
     $Menu_Button.Text = "Menu"
     $Menu_Button.add_click( {Press_key 82} )
 
     $Power_Button = New-Object System.Windows.Forms.Button
-    $Power_Button.Location = New-Object System.Drawing.Point(360,60)
-    $Power_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Power_Button.Location = New-Object System.Drawing.Point(500,60)
+    $Power_Button.Size = New-Object System.Drawing.Size(100,40)
     $Power_Button.Text = "Power"
     $Power_Button.add_click( {Press_key 26} )
 
     $Vol_up_Button = New-Object System.Windows.Forms.Button
-    $Vol_up_Button.Location = New-Object System.Drawing.Point(360,100)
-    $Vol_up_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Vol_up_Button.Location = New-Object System.Drawing.Point(500,120)
+    $Vol_up_Button.Size = New-Object System.Drawing.Size(100,40)
     $Vol_up_Button.Text = "Volumn +"
     $Vol_up_Button.add_click( {Press_key 24} )
 
     $Vol_down_Button = New-Object System.Windows.Forms.Button
-    $Vol_down_Button.Location = New-Object System.Drawing.Point(360,140)
-    $Vol_down_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Vol_down_Button.Location = New-Object System.Drawing.Point(500,180)
+    $Vol_down_Button.Size = New-Object System.Drawing.Size(100,40)
     $Vol_down_Button.Text = "Volumn -"
     $Vol_down_Button.add_click( {Press_key 25} )
 
     $Swipe_up_Button = New-Object System.Windows.Forms.Button
-    $Swipe_up_Button.Location = New-Object System.Drawing.Point(140,40)
-    $Swipe_up_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_up_Button.Location = New-Object System.Drawing.Point(200,40)
+    $Swipe_up_Button.Size = New-Object System.Drawing.Size(100,40)
     $Swipe_up_Button.Text = "向上滑动"
     $Swipe_up_Button.add_click( {Swipe_screen 500 800 500 200} )
 
     $Swipe_down_Button = New-Object System.Windows.Forms.Button
-    $Swipe_down_Button.Location = New-Object System.Drawing.Point(140,160)
-    $Swipe_down_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_down_Button.Location = New-Object System.Drawing.Point(200,200)
+    $Swipe_down_Button.Size = New-Object System.Drawing.Size(100,40)
     $Swipe_down_Button.Text = "向下滑动"
     $Swipe_down_Button.add_click( {Swipe_screen 500 300 500 800} )
 
     $Swipe_left_Button = New-Object System.Windows.Forms.Button
-    $Swipe_left_Button.Location = New-Object System.Drawing.Point(40,100)
-    $Swipe_left_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_left_Button.Location = New-Object System.Drawing.Point(60,120)
+    $Swipe_left_Button.Size = New-Object System.Drawing.Size(100,40)
     $Swipe_left_Button.Text = "向左滑动"
     $Swipe_left_Button.add_click( {Swipe_screen 500 500 100 500} )
 
     $Swipe_right_Button = New-Object System.Windows.Forms.Button
-    $Swipe_right_Button.Location = New-Object System.Drawing.Point(240,100)
-    $Swipe_right_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Swipe_right_Button.Location = New-Object System.Drawing.Point(340,120)
+    $Swipe_right_Button.Size = New-Object System.Drawing.Size(100,40)
     $Swipe_right_Button.Text = "向右滑动"
     $Swipe_right_Button.add_click( {Swipe_screen 100 500 500 500} )
 
     $Screen_cap_Button = New-Object System.Windows.Forms.Button
-    $Screen_cap_Button.Location = New-Object System.Drawing.Point(140,100)
-    $Screen_cap_Button.Size = New-Object System.Drawing.Size(80,30)
+    $Screen_cap_Button.Location = New-Object System.Drawing.Point(200,120)
+    $Screen_cap_Button.Size = New-Object System.Drawing.Size(100,40)
     $Screen_cap_Button.Text = "屏幕截图"
     $Screen_cap_Button.add_click( {Screen_cap} )
 
-    $Menu_Button = New-Object System.Windows.Forms.Button
-    $Menu_Button.Location = New-Object System.Drawing.Point(230,240)
-    $Menu_Button.Size = New-Object System.Drawing.Size(80,30)
-    $Menu_Button.Text = "Menu"
-    $Menu_Button.add_click( {Press_key 82} )
-
     $Warning_label = New-Object System.Windows.Forms.Label
     $Warning_label.Location = New-Object System.Drawing.Point(20,10)
-    $Warning_label.Size = New-Object System.Drawing.Size(300,20)
+    $Warning_label.Size = New-Object System.Drawing.Size(300,40)
     $Warning_label.Text = ""
     $Warning_label.ForeColor = "Red"
-    $Warning_label.Font = New-Object System.Drawing.Font("Tahoma",10,[System.Drawing.FontStyle]::Bold)
+    $Warning_label.Font = New-Object System.Drawing.Font("Tahoma",12,[System.Drawing.FontStyle]::Bold)
 
     #以下为主窗体显示元素
     $Time_label = New-Object System.Windows.Forms.Label
-    $Time_label.Location = New-Object System.Drawing.Point(20,360)
-    $Time_label.Size = New-Object System.Drawing.Size(280,20)
+    $Time_label.Location = New-Object System.Drawing.Point(20,450)
+    $Time_label.Size = New-Object System.Drawing.Size(400,20)
     $Time_label.Text = "工具启动于：" + (Get-Date -Format "yyyy年M月dd日 dddd HH:mm:ss")
+    $Time_label.Font = New-Object System.Drawing.Font("Microsoft YaHei",10,[System.Drawing.FontStyle]::Regular)
 
     $Exit_Button = New-Object System.Windows.Forms.Button
-    $Exit_Button.Location = New-Object System.Drawing.Point(380,330)
+    $Exit_Button.Location = New-Object System.Drawing.Point(580,420)
     $Exit_Button.Size = New-Object System.Drawing.Size(90,40)
     $Exit_Button.Text = "退出"
-    $Exit_Button.add_click( { $MainForm.Close() } )
+    $Exit_Button.add_click( {$MainForm.Close()} )
 
     $About_Button = New-Object System.Windows.Forms.Button
-    $About_Button.Location = New-Object System.Drawing.Point(300,330)
+    $About_Button.Location = New-Object System.Drawing.Point(500,420)
     $About_Button.Size = New-Object System.Drawing.Size(60,40)
     $About_Button.Text = "关于"
-    $About_Button.add_click( { About } )
+    $About_Button.add_click( {About} )
 
     $MainForm.Controls.Add($Exit_Button)
     $MainForm.Controls.Add($About_Button)
