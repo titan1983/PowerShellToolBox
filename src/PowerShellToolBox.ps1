@@ -444,6 +444,16 @@ Function Logcat( $param )
     
 }
 
+Function FilterLog($keyword)
+{
+    switch (( $device_count = List_devices ))
+    {
+        1{$Log.Text = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}}
+        0 { $Log.Text = "没找到设备。";break }
+        {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
+    }
+}
+
 Function About
 {
     $AboutForm = New-Object System.Windows.Forms.Form
@@ -666,6 +676,22 @@ Function StartUp
     $Trace_export_Button.Text = "导出trace文件"
     $Trace_export_Button.add_click( {Logcat "trace"} )
 
+    $Log_filter_Button = New-Object System.Windows.Forms.Button
+    $Log_filter_Button.Location = New-Object System.Drawing.Point(20,290)
+    $Log_filter_Button.Size = New-Object System.Drawing.Size(60,28)
+    $Log_filter_Button.Text = "过滤"
+    $Log_filter_Button.add_click( {FilterLog $Filter_box.Text.toString()} )
+
+    $Filter_box = New-Object System.Windows.Forms.RichTextBox
+    $Filter_box.Location = New-Object System.Drawing.Point(100,290) 
+    $Filter_box.Size = New-Object System.Drawing.Size(180,28) 
+    $Filter_box.ReadOnly = $false
+    $Filter_box.Text = ""
+    $Filter_box.WordWrap = $false
+    $Filter_box.ForeColor = ([System.Drawing.Color]::Orange)
+    $Filter_box.BackColor = ([System.Drawing.Color]::Blue)
+    $Filter_box.Font = New-Object System.Drawing.Font("Tahoma",8,[System.Drawing.FontStyle]::Bold)
+
     #以下为tab_option页的元素
     $Home_Button = New-Object System.Windows.Forms.Button
     $Home_Button.Location = New-Object System.Drawing.Point(140,240)
@@ -787,11 +813,13 @@ Function StartUp
     $Tab_adb_tools.Controls.Add($Connect_Button)
     $Tab_adb_tools.Controls.Add($Disconnect_Button)
 
+    $Tab_logcat.Controls.Add($Log_filter_Button)
     $Tab_logcat.Controls.Add($Log)
     $Tab_logcat.Controls.Add($Log_snap_Button)
     $Tab_logcat.Controls.Add($Log_clear_Button)
     $Tab_logcat.Controls.Add($Log_export_Button)
     $Tab_logcat.Controls.Add($Trace_export_Button)
+    $Tab_logcat.Controls.Add($Filter_box)
 
     $Tab_option.Controls.Add($Home_Button)
     $Tab_option.Controls.Add($Back_Button)
