@@ -45,8 +45,8 @@ Function Init_power
                 }
                }
               ;break}
-            0 { $Console.Text = "没找到设备。";break }
-            {$_ -ge 2} { $Console.Text = "连接了太多Android设备啦！";break }
+            0 {$Console.Text = "没找到设备。";break}
+            {$_ -ge 2} {$Console.Text = "连接了太多Android设备啦！";break}
         }
     }
     else
@@ -135,8 +135,8 @@ Function Export_bugreport
                 $Console.Text = "执行失败，请检查手机连接或ADB环境。"
             };break
           }
-        0 { $Console.Text = "没找到设备。";break }
-        {$_ -ge 2 } { $Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。";break }
+        0 {$Console.Text = "没找到设备。";break}
+        {$_ -ge 2 } {$Console.Text = "连接了太多设备啦！`n导出时电脑上只能连接一台Android设备。";break}
     }
 }
 
@@ -203,8 +203,8 @@ Function Show_devices_info
             }
             ;break
           }
-        0 { $Info.Text = "没找到设备。";break }
-        {$_ -ge 2 } { $Info.Text = "连了这么多台设备，我哪知道要查哪个。";break }
+        0 {$Info.Text = "没找到设备。";break}
+        {$_ -ge 2 } {$Info.Text = "连了这么多台设备，我哪知道要查哪个。";break}
     }
 }
 
@@ -239,7 +239,7 @@ Function Reboot
                 adb reboot
                 $Info.Text = "已重启，请检查设备。";break
               }
-            0 { $Info.Text = "没找到设备。";break }
+            0 {$Info.Text = "没找到设备。";break}
             {$_ -ge 2} {$Info.Text = "连接了太多设备啦！没法重启。";break}
         }       
     }
@@ -380,8 +380,8 @@ Function Press_key($keycode)
     switch ( ( $device_count = List_devices ) )
 	    {
             1 {$Warning_label.Text = "";adb shell input keyevent $keycode;break}
-            0 { $Warning_label.Text = "没找到设备。";break }
-            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+            0 {$Warning_label.Text = "没找到设备。";break}
+            {$_ -ge 2} {$Warning_label.Text = "连接了太多Android设备啦！";break}
         }
 }
 
@@ -390,8 +390,8 @@ Function Swipe_screen($start_x, $start_y, $end_x, $end_y)
     switch ( ( $device_count = List_devices ) )
 	    {
             1 {$Warning_label.Text = "";adb shell input swipe $start_x $start_y $end_x $end_y;break}
-            0 { $Warning_label.Text = "没找到设备。";break }
-            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+            0 {$Warning_label.Text = "没找到设备。";break}
+            {$_ -ge 2} {$Warning_label.Text = "连接了太多Android设备啦！";break}
         }
 }
 
@@ -411,8 +411,8 @@ Function Screen_cap
                     $Warning_label.Text = "截图保存失败，请检查目标磁盘。"
                 }
                }
-            0 { $Warning_label.Text = "没找到设备。";break }
-            {$_ -ge 2} { $Warning_label.Text = "连接了太多Android设备啦！";break }
+            0 {$Warning_label.Text = "没找到设备。";break}
+            {$_ -ge 2} {$Warning_label.Text = "连接了太多Android设备啦！";break}
         }
 }
 
@@ -457,7 +457,7 @@ Function Logcat( $param )
                         default{$Log.Text = "?????"}
                     };break
               }
-            0 { $Log.Text = "没找到设备。";break }
+            0 {$Log.Text = "没找到设备。";break}
             {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
         } 
     
@@ -467,8 +467,8 @@ Function FilterLog($keyword)
 {
     switch (( $device_count = List_devices ))
     {
-        1{$Log.Text = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}}
-        0 { $Log.Text = "没找到设备。";break }
+        1 {$Log.Text = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}}
+        0 {$Log.Text = "没找到设备。";break}
         {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
     }
 }
@@ -705,7 +705,7 @@ Function StartUp
 
     $Filter_box = New-Object System.Windows.Forms.RichTextBox
     $Filter_box.Location = New-Object System.Drawing.Point(100,340) 
-    $Filter_box.Size = New-Object System.Drawing.Size(400,30) 
+    $Filter_box.Size = New-Object System.Drawing.Size(570,30) 
     $Filter_box.ReadOnly = $false
     $Filter_box.Text = ""
     $Filter_box.WordWrap = $false
