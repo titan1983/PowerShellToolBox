@@ -193,7 +193,8 @@ Function Show_devices_info
                     $Get_CPU = adb shell cat /proc/cpuinfo | findstr "Hardware"
                     $Get_cores = adb shell cat /proc/cpuinfo | findstr "processor"
                     $Get_Mem = adb shell cat /proc/meminfo | findstr "MemTotal"
-                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n屏幕DPI: " + (isNull $Get_screen_dpi) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim()
+                    $total_storage, $used_storage, $free_storage = Get_storage
+                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n屏幕DPI: " + (isNull $Get_screen_dpi) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim() + "`n内部存储空间: " + $total_storage + "`n已用空间: " + $used_storage + "`n剩余空间: " + $free_storage
                 }
                 catch [System.Exception]
                 {
@@ -204,6 +205,24 @@ Function Show_devices_info
           }
         0 { $Info.Text = "没找到设备。";break }
         {$_ -ge 2 } { $Info.Text = "连了这么多台设备，我哪知道要查哪个。";break }
+    }
+}
+
+Function Get_storage
+{
+    $Get_storage = adb shell df /data/
+
+    if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+    {
+        [Math]::Round((($Get_storage[1] -replace "\s{2,}"," ").split(" ")[1]/1024/1024),1).toString() + "GB"
+        [Math]::Round((($Get_storage[1] -replace "\s{2,}"," ").split(" ")[2]/1024/1024),1).toString() + "GB"
+        [Math]::Round((($Get_storage[1] -replace "\s{2,}"," ").split(" ")[3]/1024/1024),1).toString() + "GB"
+    }
+    else
+    {
+        ($Get_storage[2] -replace "\s{2,}"," ").split(" ")[1]
+        ($Get_storage[2] -replace "\s{2,}"," ").split(" ")[2]
+        ($Get_storage[2] -replace "\s{2,}"," ").split(" ")[3]
     }
 }
 
@@ -536,6 +555,7 @@ Function StartUp
     $Tab_logcat = New-Object System.Windows.Forms.TabPage
     $Tab_option = New-Object System.Windows.Forms.TabPage
     $Tab_apk_info = New-Object System.Windows.Forms.TabPage
+    $Tab_CPU_MEM = New-Object System.Windows.Forms.TabPage
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
@@ -796,6 +816,7 @@ Function StartUp
     $tabControl.Controls.Add($Tab_logcat)
     $tabControl.Controls.Add($Tab_option)
     #$tabControl.Controls.Add($Tab_apk_info)
+    #$tabControl.Controls.Add($Tab_CPU_MEM)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
     $Tab_power.Controls.Add($Init_Button)
