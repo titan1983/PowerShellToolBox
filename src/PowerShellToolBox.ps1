@@ -194,7 +194,8 @@ Function Show_devices_info
                     $Get_cores = adb shell cat /proc/cpuinfo | findstr "processor"
                     $Get_Mem = adb shell cat /proc/meminfo | findstr "MemTotal"
                     $total_storage, $used_storage, $free_storage = Get_storage
-                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n屏幕DPI: " + (isNull $Get_screen_dpi) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim() + "`n内部存储空间: " + $total_storage + "`n已用空间: " + $used_storage + "`n剩余空间: " + $free_storage
+                    $WIFI_stat = adb shell dumpsys wifi
+                    $Info.Text = "Android版本: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`n屏幕分辨率: " + (isNull $Get_screen_res) + "`n屏幕DPI: " + (isNull $Get_screen_dpi) + "`n制造商: " + (isNull $Get_manuf) + "`n型号: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPU核心数: " + $Get_cores.length + "`n物理内存: " + (isNull $Get_Mem).Substring(11).trim() + "`n内部存储空间: " + $total_storage + "`n已用空间: " + $used_storage + "`n剩余空间: " + $free_storage + "`n" + $WIFI_stat[0]
                 }
                 catch [System.Exception]
                 {
