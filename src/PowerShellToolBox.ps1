@@ -426,7 +426,7 @@ Function Logcat( $param )
             1 {
                 switch ( $param )
                     {
-                        {$param -eq "snap"}{$Log.Text = adb logcat -d -v time;break}
+                        {$param -eq "snap"}{$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time));break}
                         {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
                         {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + "\" + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
                         {$param -eq "trace"}{
@@ -468,10 +468,20 @@ Function FilterLog($keyword)
 {
     switch (( $device_count = List_devices ))
     {
-        1 {$Log.Text = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}}
+        1 {$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}))}
         0 {$Log.Text = "没找到设备。";break}
         {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
     }
+}
+
+Function Show_in_line($target)
+{
+    $temp = $null
+    for ($i = 0; $i -lt $target.length; $i++)
+    {
+        $temp = $temp + $target[$i] + "`n"
+    }
+    return $temp
 }
 
 Function About
