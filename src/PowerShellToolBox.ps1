@@ -523,7 +523,7 @@ Function ShowAPKInfo($filepath)
     $Version_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[3].Substring(12).Trim("'")
     $Min_sdk.Text = ((Get-Content $env:TMP\temp.txt)[2].split(" ")).Substring(11).Trim("'")
     $Target_sdk.Text = ((Get-Content $env:TMP\temp.txt)[3].split(" ")).Substring(17).Trim("'")
-    $APK_name.Text = ((Get-Content $env:TMP\temp.txt | findstr "application:").split(" "))[1].Substring(6).Trim("'")
+    $APK_name.Text = ((Get-Content -encoding utf8 $env:TMP\temp.txt | findstr "application:").split(" "))[1].Substring(6).Trim("'")
 
     $APK_info_Button.Enabled = $true
 }
