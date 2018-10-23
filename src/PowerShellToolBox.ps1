@@ -3,10 +3,11 @@
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.4"
+$Global:version = "1.0.5"
 
 Function Init_power
 {
@@ -484,6 +485,54 @@ Function Show_in_line($target)
     return $temp
 }
 
+Function GetMD5($filepath)
+{
+    return (((Get-FileHash $filepath -Algorithm MD5)|findstr "MD5").substring(15,48))
+}
+
+Function ShowOpenFileDialog
+{
+    $dialog = New-Object -TypeName Microsoft.Win32.OpenFileDialog
+    $dialog.Title = '选择APK文件'
+    $dialog.InitialDirectory = [Environment]::GetFolderPath('MyDocuments')
+    $dialog.Filter = 'APK files|*.apk|All|*.*'
+
+    $dialog_shown = $dialog.ShowDialog()
+
+    if ($dialog_shown -eq $true)
+    {
+        ShowAPKInfo $dialog.FileName
+    }
+}
+
+Function ShowAPKInfo($filepath)
+{
+    $current = Get-Location
+    $path = Get-Item -Path $env:ANDROID_SDK_HOME\build-tools
+    $temp = ls $path
+    $temp = $path.ToString() + "\" + $temp[$temp.Length-1].ToString() + "\"
+    cd $temp
+    cmd /c "aapt d badging $filepath > $env:TMP\temp.txt"
+    cd $current
+
+    $APK_path.Text = $filepath
+    $APK_size.Text = ((Get-Item $filepath).Length).ToString() + " Byte"
+
+    $Package_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[1].Substring(5).Trim("'")
+    $Version_code.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[2].Substring(12).Trim("'")
+    $Version_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[3].Substring(12).Trim("'")
+    $Min_sdk.Text = ((Get-Content $env:TMP\temp.txt)[2].split(" ")).Substring(11).Trim("'")
+    $Target_sdk.Text = ((Get-Content $env:TMP\temp.txt)[3].split(" ")).Substring(17).Trim("'")
+    $APK_name.Text = ((Get-Content $env:TMP\temp.txt | findstr "application:").split(" "))[1].Substring(6).Trim("'")
+
+    $APK_info_Button.Enabled = $true
+}
+
+Function ShowDetail
+{
+    notepad ($env:TMP + "\temp.txt")
+}
+
 Function About
 {
     $AboutForm = New-Object System.Windows.Forms.Form
@@ -798,6 +847,124 @@ Function StartUp
     $Warning_label.ForeColor = "Red"
     $Warning_label.Font = New-Object System.Drawing.Font("Tahoma",12,[System.Drawing.FontStyle]::Bold)
 
+    #以下为tab_apk_info页的元素
+    $OpenFile_button = New-Object System.Windows.Forms.Button
+    $OpenFile_button.Location = New-Object System.Drawing.Point(580,300)
+    $OpenFile_button.Size = New-Object System.Drawing.Size(90,40)
+    $OpenFile_button.Text = "打开APK文件"
+    $OpenFile_button.add_click( {ShowOpenFileDialog} )
+
+    $APK_name = New-Object System.Windows.Forms.RichTextBox
+    $APK_name.Location = New-Object System.Drawing.Point(120,20) 
+    $APK_name.Size = New-Object System.Drawing.Size(300,25) 
+    $APK_name.ReadOnly = $True
+    $APK_name.Text = ""
+    $APK_name.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $APK_name.ForeColor = "#370fa5"
+
+    $APK_name_label = New-Object System.Windows.Forms.Label
+    $APK_name_label.Location = New-Object System.Drawing.Point(20,20)
+    $APK_name_label.Size = New-Object System.Drawing.Size(100,25)
+    $APK_name_label.Text = "应用名称："
+
+    $APK_path = New-Object System.Windows.Forms.RichTextBox
+    $APK_path.Location = New-Object System.Drawing.Point(120,300) 
+    $APK_path.Size = New-Object System.Drawing.Size(400,25) 
+    $APK_path.ReadOnly = $True
+    $APK_path.Text = ""
+    $APK_path.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $APK_path.ForeColor = "#370fa5"
+
+    $APK_path_label = New-Object System.Windows.Forms.Label
+    $APK_path_label.Location = New-Object System.Drawing.Point(20,300)
+    $APK_path_label.Size = New-Object System.Drawing.Size(100,25)
+    $APK_path_label.Text = "APK路径："
+
+    $APK_size = New-Object System.Windows.Forms.RichTextBox
+    $APK_size.Location = New-Object System.Drawing.Point(120,340) 
+    $APK_size.Size = New-Object System.Drawing.Size(100,25) 
+    $APK_size.ReadOnly = $True
+    $APK_size.Text = ""
+    $APK_size.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $APK_size.ForeColor = "#370fa5"
+
+    $APK_size_label = New-Object System.Windows.Forms.Label
+    $APK_size_label.Location = New-Object System.Drawing.Point(20,340)
+    $APK_size_label.Size = New-Object System.Drawing.Size(100,25)
+    $APK_size_label.Text = "APK文件大小："
+
+    $Package_name = New-Object System.Windows.Forms.RichTextBox
+    $Package_name.Location = New-Object System.Drawing.Point(120,60) 
+    $Package_name.Size = New-Object System.Drawing.Size(300,25) 
+    $Package_name.ReadOnly = $True
+    $Package_name.Text = ""
+    $Package_name.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Package_name.ForeColor = "#370fa5"
+
+    $Package_name_label = New-Object System.Windows.Forms.Label
+    $Package_name_label.Location = New-Object System.Drawing.Point(20,60)
+    $Package_name_label.Size = New-Object System.Drawing.Size(100,25)
+    $Package_name_label.Text = "APK包名："
+
+    $Version_name = New-Object System.Windows.Forms.RichTextBox
+    $Version_name.Location = New-Object System.Drawing.Point(120,100) 
+    $Version_name.Size = New-Object System.Drawing.Size(100,25) 
+    $Version_name.ReadOnly = $True
+    $Version_name.Text = ""
+    $Version_name.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Version_name.ForeColor = "#370fa5"
+
+    $Version_name_label = New-Object System.Windows.Forms.Label
+    $Version_name_label.Location = New-Object System.Drawing.Point(20,100)
+    $Version_name_label.Size = New-Object System.Drawing.Size(100,25)
+    $Version_name_label.Text = "Version Name："
+
+    $Version_code = New-Object System.Windows.Forms.RichTextBox
+    $Version_code.Location = New-Object System.Drawing.Point(120,140) 
+    $Version_code.Size = New-Object System.Drawing.Size(100,25) 
+    $Version_code.ReadOnly = $True
+    $Version_code.Text = ""
+    $Version_code.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Version_code.ForeColor = "#370fa5"
+
+    $Version_code_label = New-Object System.Windows.Forms.Label
+    $Version_code_label.Location = New-Object System.Drawing.Point(20,140)
+    $Version_code_label.Size = New-Object System.Drawing.Size(100,25)
+    $Version_code_label.Text = "Version Code："
+
+    $Target_sdk = New-Object System.Windows.Forms.RichTextBox
+    $Target_sdk.Location = New-Object System.Drawing.Point(120,180) 
+    $Target_sdk.Size = New-Object System.Drawing.Size(100,25) 
+    $Target_sdk.ReadOnly = $True
+    $Target_sdk.Text = ""
+    $Target_sdk.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Target_sdk.ForeColor = "#370fa5"
+
+    $Target_sdk_label = New-Object System.Windows.Forms.Label
+    $Target_sdk_label.Location = New-Object System.Drawing.Point(20,180)
+    $Target_sdk_label.Size = New-Object System.Drawing.Size(100,25)
+    $Target_sdk_label.Text = "适配系统等级："
+
+    $Min_sdk = New-Object System.Windows.Forms.RichTextBox
+    $Min_sdk.Location = New-Object System.Drawing.Point(120,220) 
+    $Min_sdk.Size = New-Object System.Drawing.Size(100,25) 
+    $Min_sdk.ReadOnly = $True
+    $Min_sdk.Text = ""
+    $Min_sdk.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Min_sdk.ForeColor = "#370fa5"
+
+    $Min_sdk_label = New-Object System.Windows.Forms.Label
+    $Min_sdk_label.Location = New-Object System.Drawing.Point(20,220)
+    $Min_sdk_label.Size = New-Object System.Drawing.Size(100,25)
+    $Min_sdk_label.Text = "最低系统等级："
+
+    $APK_info_Button = New-Object System.Windows.Forms.Button
+    $APK_info_Button.Location = New-Object System.Drawing.Point(580,220)
+    $APK_info_Button.Size = New-Object System.Drawing.Size(90,40)
+    $APK_info_Button.Text = "查看详细信息"
+    $APK_info_Button.add_click( {ShowDetail} )
+    $APK_info_Button.Enabled = $false
+
     #以下为主窗体显示元素
     $Time_label = New-Object System.Windows.Forms.Label
     $Time_label.Location = New-Object System.Drawing.Point(20,450)
@@ -826,7 +993,7 @@ Function StartUp
     $tabControl.Controls.Add($Tab_adb_tools)
     $tabControl.Controls.Add($Tab_logcat)
     $tabControl.Controls.Add($Tab_option)
-    #$tabControl.Controls.Add($Tab_apk_info)
+    $tabControl.Controls.Add($Tab_apk_info)
     #$tabControl.Controls.Add($Tab_CPU_MEM)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
@@ -861,6 +1028,25 @@ Function StartUp
     $Tab_option.Controls.Add($Swipe_right_Button)
     $Tab_option.Controls.Add($Warning_label)
     $Tab_option.Controls.Add($Screen_cap_Button)
+
+    $Tab_apk_info.Controls.Add($OpenFile_button)
+    $Tab_apk_info.Controls.Add($APK_name)
+    $Tab_apk_info.Controls.Add($APK_name_label)
+    $Tab_apk_info.Controls.Add($APK_size)
+    $Tab_apk_info.Controls.Add($APK_size_label)
+    $Tab_apk_info.Controls.Add($APK_path)
+    $Tab_apk_info.Controls.Add($APK_path_label)
+    $Tab_apk_info.Controls.Add($Package_name)
+    $Tab_apk_info.Controls.Add($Package_name_label)
+    $Tab_apk_info.Controls.Add($Version_name)
+    $Tab_apk_info.Controls.Add($Version_name_label)
+    $Tab_apk_info.Controls.Add($Version_code)
+    $Tab_apk_info.Controls.Add($Version_code_label)
+    $Tab_apk_info.Controls.Add($Target_sdk)
+    $Tab_apk_info.Controls.Add($Target_sdk_label)
+    $Tab_apk_info.Controls.Add($Min_sdk)
+    $Tab_apk_info.Controls.Add($Min_sdk_label)
+    $Tab_apk_info.Controls.Add($APK_info_button)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
     $MainForm.ShowDialog()
