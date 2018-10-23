@@ -868,15 +868,15 @@ Function StartUp
     $APK_name_label.Text = "应用名称："
 
     $APK_path = New-Object System.Windows.Forms.RichTextBox
-    $APK_path.Location = New-Object System.Drawing.Point(120,300) 
-    $APK_path.Size = New-Object System.Drawing.Size(400,25) 
+    $APK_path.Location = New-Object System.Drawing.Point(120,280) 
+    $APK_path.Size = New-Object System.Drawing.Size(400,50) 
     $APK_path.ReadOnly = $True
     $APK_path.Text = ""
     $APK_path.BorderStyle = [System.Windows.Forms.BorderStyle]::None
     $APK_path.ForeColor = "#370fa5"
 
     $APK_path_label = New-Object System.Windows.Forms.Label
-    $APK_path_label.Location = New-Object System.Drawing.Point(20,300)
+    $APK_path_label.Location = New-Object System.Drawing.Point(20,280)
     $APK_path_label.Size = New-Object System.Drawing.Size(100,25)
     $APK_path_label.Text = "APK路径："
 
