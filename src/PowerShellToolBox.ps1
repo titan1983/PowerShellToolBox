@@ -238,6 +238,7 @@ Function Reboot
         switch ( ( $device_count = List_devices ) )
         {
             1 {
+                $Info.Text = "正在重启，请稍候。"
                 adb reboot
                 $Info.Text = "已重启，请检查设备。";break
               }
