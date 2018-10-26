@@ -487,7 +487,7 @@ Function Show_in_line($target)
 
 Function GetMD5($filepath)
 {
-    return (((Get-FileHash $filepath -Algorithm MD5)|findstr "MD5").substring(15,48))
+    return (((Get-FileHash $filepath -Algorithm MD5)|findstr "MD5").substring(15,48).Trim())
 }
 
 Function ShowOpenFileDialog
@@ -961,7 +961,7 @@ Function StartUp
 
     $APK_MD5 = New-Object System.Windows.Forms.RichTextBox
     $APK_MD5.Location = New-Object System.Drawing.Point(120,20) 
-    $APK_MD5.Size = New-Object System.Drawing.Size(220,25) 
+    $APK_MD5.Size = New-Object System.Drawing.Size(200,25) 
     $APK_MD5.ReadOnly = $True
     $APK_MD5.Text = ""
     $APK_MD5.BorderStyle = [System.Windows.Forms.BorderStyle]::None
