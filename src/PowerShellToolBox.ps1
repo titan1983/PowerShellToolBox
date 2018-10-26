@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.5"
+$Global:version = "1.0.6"
 
 Function Init_power
 {
@@ -517,6 +517,7 @@ Function ShowAPKInfo($filepath)
 
     $APK_path.Text = $filepath
     $APK_size.Text = ((Get-Item $filepath).Length).ToString() + " Byte"
+    $APK_MD5.Text = GetMD5($filepath)
 
     $Package_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[1].Substring(5).Trim("'")
     $Version_code.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[2].Substring(12).Trim("'")
@@ -958,6 +959,19 @@ Function StartUp
     $Min_sdk_label.Size = New-Object System.Drawing.Size(100,25)
     $Min_sdk_label.Text = "最低系统等级："
 
+    $APK_MD5 = New-Object System.Windows.Forms.RichTextBox
+    $APK_MD5.Location = New-Object System.Drawing.Point(120,20) 
+    $APK_MD5.Size = New-Object System.Drawing.Size(220,25) 
+    $APK_MD5.ReadOnly = $True
+    $APK_MD5.Text = ""
+    $APK_MD5.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $APK_MD5.ForeColor = "#370fa5"
+
+    $APK_MD5_label = New-Object System.Windows.Forms.Label
+    $APK_MD5_label.Location = New-Object System.Drawing.Point(22,20)
+    $APK_MD5_label.Size = New-Object System.Drawing.Size(100,25)
+    $APK_MD5_label.Text = "MD5："
+
     $APK_info_Button = New-Object System.Windows.Forms.Button
     $APK_info_Button.Location = New-Object System.Drawing.Point(580,220)
     $APK_info_Button.Size = New-Object System.Drawing.Size(90,40)
@@ -1045,6 +1059,8 @@ Function StartUp
     $Tab_apk_info.Controls.Add($Min_sdk)
     $Tab_apk_info.Controls.Add($Min_sdk_label)
     $Tab_apk_info.Controls.Add($APK_info_button)
+    $Tab_apk_info.Controls.Add($APK_MD5)
+    $Tab_apk_info.Controls.Add($APK_MD5_label)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
     $MainForm.ShowDialog()
