@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.6"
+$Global:version = "1.0.7"
 
 Function Init_power
 {
@@ -419,6 +419,16 @@ Function Screen_cap
         }
 }
 
+Function SetBrightness($value)
+{
+    switch ( ( $device_count = List_devices ) )
+	{
+        1 {$Warning_label.Text = "";adb shell settings put system screen_brightness $value;break}
+        0 {$Warning_label.Text = "没找到设备。";break}
+        {$_ -ge 2} {$Warning_label.Text = "连接了太多Android设备啦！";break}
+    }
+}
+
 Function Logcat( $param )
 {
     $logcatname = "Logcat_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
@@ -470,7 +480,7 @@ Function FilterLog($keyword)
 {
     switch (( $device_count = List_devices ))
     {
-        1 {$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}))}
+        1 {$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}));break}
         0 {$Log.Text = "没找到设备。";break}
         {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
     }
@@ -842,6 +852,20 @@ Function StartUp
     $Screen_cap_Button.Text = "屏幕截图"
     $Screen_cap_Button.add_click( {Screen_cap} )
 
+    $Brightness_Max_Button = New-Object System.Windows.Forms.Button
+    $Brightness_Max_Button.Location = New-Object System.Drawing.Point(520,260)
+    $Brightness_Max_Button.Size = New-Object System.Drawing.Size(90,30)
+    $Brightness_Max_Button.Text = "屏幕调至最亮"
+    $Brightness_Max_Button.add_click( {SetBrightness 255} )
+
+
+    $Brightness_Min_Button = New-Object System.Windows.Forms.Button
+    $Brightness_Min_Button.Location = New-Object System.Drawing.Point(520,300)
+    $Brightness_Min_Button.Size = New-Object System.Drawing.Size(90,30)
+    $Brightness_Min_Button.Text = "屏幕调至最暗"
+    $Brightness_Min_Button.add_click( {SetBrightness 1} )
+
+
     $Warning_label = New-Object System.Windows.Forms.Label
     $Warning_label.Location = New-Object System.Drawing.Point(20,10)
     $Warning_label.Size = New-Object System.Drawing.Size(300,40)
@@ -1043,6 +1067,8 @@ Function StartUp
     $Tab_option.Controls.Add($Swipe_right_Button)
     $Tab_option.Controls.Add($Warning_label)
     $Tab_option.Controls.Add($Screen_cap_Button)
+    $Tab_option.Controls.Add($Brightness_Max_Button)
+    $Tab_option.Controls.Add($Brightness_Min_Button)
 
     $Tab_apk_info.Controls.Add($OpenFile_button)
     $Tab_apk_info.Controls.Add($APK_size)
