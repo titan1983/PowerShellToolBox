@@ -557,7 +557,7 @@ Function ShowAPKInfo($filepath)
 
     if ((Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:") -ne $null)
     {
-        $Target_sdk.Text = (Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:").Substring(11).Trim("'")
+        $Target_sdk.Text = (Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:").Substring(17).Trim("'")
     }
     else
     {
