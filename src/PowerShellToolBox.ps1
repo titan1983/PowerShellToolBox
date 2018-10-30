@@ -517,7 +517,7 @@ Function ShowOpenFileDialog
     $dialog = New-Object -TypeName Microsoft.Win32.OpenFileDialog
     $dialog.Title = 'Ñ¡ÔñAPKÎÄ¼þ'
     $dialog.InitialDirectory = [Environment]::GetFolderPath('MyDocuments')
-    $dialog.Filter = 'APK files|*.apk|'
+    $dialog.Filter = 'APK files|*.apk|All|*.*'
 
     $dialog_shown = $dialog.ShowDialog()
 
