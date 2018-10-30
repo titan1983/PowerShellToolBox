@@ -544,8 +544,26 @@ Function ShowAPKInfo($filepath)
     $Package_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[1].Substring(5).Trim("'")
     $Version_code.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[2].Substring(12).Trim("'")
     $Version_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[3].Substring(12).Trim("'")
-    $Min_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "sdkVersion:").Substring(11).Trim("'")
-    $Target_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "targetSdkVersion:").Substring(17).Trim("'")
+    
+    
+    if ((Get-Content $env:TMP\temp.txt|findstr "sdkVersion:") -ne $null)
+    {
+        $Min_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "sdkVersion:").Substring(11).Trim("'")
+    }
+    else
+    {
+        $Min_sdk.Text = "NA"
+    }
+
+    if ((Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:") -ne $null)
+    {
+        $Target_sdk.Text = (Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:").Substring(11).Trim("'")
+    }
+    else
+    {
+        $Target_sdk.Text = "NA"
+    }
+
     #$APK_name.Text = ((Get-Content -Encoding UTF8 $env:TMP\temp.txt | findstr "application:").split(" "))[1].Substring(6).Trim("'")
 
     $APK_info_Button.Enabled = $true
