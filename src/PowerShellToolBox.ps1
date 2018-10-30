@@ -379,6 +379,16 @@ Function Disconnect
     }
 }
 
+Function ListPackage
+{
+    switch ( ( $device_count = List_devices ) )
+	{
+        1 {$Info.Text = adb shell pm list package;break}
+        0 {$Info.Text = "没找到设备。";break}
+        {$_ -ge 2} {$Info.Text = "连接了太多Android设备啦！";break}
+    }
+}
+
 Function Press_key($keycode)
 {
     switch ( ( $device_count = List_devices ) )
@@ -534,8 +544,8 @@ Function ShowAPKInfo($filepath)
     $Package_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[1].Substring(5).Trim("'")
     $Version_code.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[2].Substring(12).Trim("'")
     $Version_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[3].Substring(12).Trim("'")
-    $Min_sdk.Text = ((Get-Content $env:TMP\temp.txt)[2].split(" ")).Substring(11).Trim("'")
-    $Target_sdk.Text = ((Get-Content $env:TMP\temp.txt)[3].split(" ")).Substring(17).Trim("'")
+    $Min_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "sdkVersion:").Substring(11).Trim("'")
+    $Target_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "targetSdkVersion:").Substring(17).Trim("'")
     #$APK_name.Text = ((Get-Content -Encoding UTF8 $env:TMP\temp.txt | findstr "application:").split(" "))[1].Substring(6).Trim("'")
 
     $APK_info_Button.Enabled = $true
@@ -725,6 +735,12 @@ Function StartUp
     $Disconnect_Button.Size = New-Object System.Drawing.Size(120,40)
     $Disconnect_Button.Text = "断开所有远程设备"
     $Disconnect_Button.add_click( {Disconnect} )
+
+    $ListPackage_Button = New-Object System.Windows.Forms.Button
+    $Listpackage_Button.Location = New-Object System.Drawing.Point(560,280)
+    $Listpackage_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Listpackage_Button.Text = "已安装应用列表"
+    $Listpackage_Button.add_click( {ListPackage} )
 
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
@@ -1047,6 +1063,7 @@ Function StartUp
     $Tab_adb_tools.Controls.Add($Reboot_Button)
     $Tab_adb_tools.Controls.Add($Connect_Button)
     $Tab_adb_tools.Controls.Add($Disconnect_Button)
+    $Tab_adb_tools.Controls.Add($Listpackage_Button)
 
     $Tab_logcat.Controls.Add($Log_filter_Button)
     $Tab_logcat.Controls.Add($Log)
