@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.7"
+$Global:version = "1.0.8"
 
 Function Init_power
 {
@@ -804,6 +804,12 @@ Function StartUp
     $Trace_export_Button.Text = "导出trace文件"
     $Trace_export_Button.add_click( {Logcat "trace"} )
 
+    $Clear_console_Button = New-Object System.Windows.Forms.Button
+    $Clear_console_Button.Location = New-Object System.Drawing.Point(580,10)
+    $Clear_console_Button.Size = New-Object System.Drawing.Size(100,40)
+    $Clear_console_Button.Text = "清屏"
+    $Clear_console_Button.add_click( {$Log.Text = "==== LogCat快照 ===="} )
+
     $Log_filter_Button = New-Object System.Windows.Forms.Button
     $Log_filter_Button.Location = New-Object System.Drawing.Point(20,340)
     $Log_filter_Button.Size = New-Object System.Drawing.Size(60,30)
@@ -1090,6 +1096,7 @@ Function StartUp
     $Tab_logcat.Controls.Add($Log_export_Button)
     $Tab_logcat.Controls.Add($Trace_export_Button)
     $Tab_logcat.Controls.Add($Filter_box)
+    $Tab_logcat.Controls.Add($Clear_console_Button)
 
     $Tab_option.Controls.Add($Home_Button)
     $Tab_option.Controls.Add($Back_Button)
