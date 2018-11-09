@@ -1,18 +1,18 @@
 #Created by Tian Xiaodong
-#Çë½«½Å±¾ÎÄ¼ş±£´æÎªANSI±àÂë¸ñÊ½£¬·ñÔòÎŞ·¨Õı³£Êä³öÖĞÎÄ×Ö·û¡£
+#è¯·å°†è„šæœ¬æ–‡ä»¶ä¿å­˜ä¸ºANSIç¼–ç æ ¼å¼ï¼Œå¦åˆ™æ— æ³•æ­£å¸¸è¾“å‡ºä¸­æ–‡å­—ç¬¦ã€‚
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName PresentationFramework
 
 #Global Define
-$Global:title = "PowerShell ÀÁÈË¹¤¾ß"
+$Global:title = "PowerShell æ‡’äººå·¥å…·"
 $Global:version = "1.0.8"
 
 Function Init_power
 {
-    $warning = "¼´½«¿ªÊ¼¹¦ºÄÆÀ²â³õÊ¼»¯£¬µã»÷OK¼ü¼ÌĞø£¬µã»÷Cancel¼üÍË³ö¡£`nInitial is coming, press `"OK`" to continue, or press `"Cancel`" to abort."
-    $done = "³õÊ¼»¯Íê³É£¬Çë¾¡¿ìÍê³ÉÆÀ²â¡£`nDone, please do the evaluation ASAP."
+    $warning = "å³å°†å¼€å§‹åŠŸè€—è¯„æµ‹åˆå§‹åŒ–ï¼Œç‚¹å‡»OKé”®ç»§ç»­ï¼Œç‚¹å‡»Cancelé”®é€€å‡ºã€‚`nInitial is coming, press `"OK`" to continue, or press `"Cancel`" to abort."
+    $done = "åˆå§‹åŒ–å®Œæˆï¼Œè¯·å°½å¿«å®Œæˆè¯„æµ‹ã€‚`nDone, please do the evaluation ASAP."
 
     $ws = New-Object -ComObject WScript.Shell
     $wsr = $ws.popup($warning,0,$title,1 + 64)
@@ -26,8 +26,8 @@ Function Init_power
 
                 switch ( ($list_devices) )
                 {
-                    {($list_devices[1].Contains( ":" ))}{$Console.Text = "Ô¶³ÌÉè±¸£¬²»ÓèÒÔ³õÊ¼»¯¡£";break}
-                    {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "Éè±¸Î´ÊÚÈ¨¡£";break}
+                    {($list_devices[1].Contains( ":" ))}{$Console.Text = "è¿œç¨‹è®¾å¤‡ï¼Œä¸äºˆä»¥åˆå§‹åŒ–ã€‚";break}
+                    {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "è®¾å¤‡æœªæˆæƒã€‚";break}
                 default
                 {
                     $init_1 = adb shell dumpsys batterystats --reset
@@ -40,26 +40,26 @@ Function Init_power
                     }
                     else
                     {
-                        $Console.Text = "³õÊ¼»¯Ê§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                        $Console.Text = "åˆå§‹åŒ–å¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
                     }
                     ;break
                 }
                }
               ;break}
-            0 {$Console.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Console.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+            0 {$Console.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Console.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
         }
     }
     else
     {
-        $Console.Text = "³õÊ¼»¯ÒÑÈ¡Ïû¡£·ÅĞÄ£¬ÎÒÃÇÉ¶¶¼Ã»¸É¡£"
+        $Console.Text = "åˆå§‹åŒ–å·²å–æ¶ˆã€‚æ”¾å¿ƒï¼Œæˆ‘ä»¬å•¥éƒ½æ²¡å¹²ã€‚"
     }
     return
 }
 
 Function List_devices
-#Õâ¸öº¯ÊıºÜÖØÒª£¬¶à´¦ÅĞ¶Ï¾ùÒÀÀµ¸Ãº¯ÊıµÄÔËĞĞ½á¹û¡£
-#·µ»ØÒÑÁ¬½ÓAndroidÉè±¸µÄÊıÁ¿£¬ÀàĞÍÎªÕûĞÎ¡£
+#è¿™ä¸ªå‡½æ•°å¾ˆé‡è¦ï¼Œå¤šå¤„åˆ¤æ–­å‡ä¾èµ–è¯¥å‡½æ•°çš„è¿è¡Œç»“æœã€‚
+#è¿”å›å·²è¿æ¥Androidè®¾å¤‡çš„æ•°é‡ï¼Œç±»å‹ä¸ºæ•´å½¢ã€‚
 {
     $global:list_devices = adb devices
 
@@ -76,17 +76,17 @@ Function List_devices
                 $wireless_count++
             }
         }
-        $Console.Text = $temp + "`nµ±Ç°ÒÑÁ¬½Ó ¡° + ($list_devices.Count-2) + ¡± Ì¨AndroidÉè±¸¡£" + "`nÆäÖĞ°üº¬ ¡° + ¡°$wireless_count¡± + ¡± Ì¨ÎŞÏßÁ¬½ÓÉè±¸¡£"
+        $Console.Text = $temp + "`nå½“å‰å·²è¿æ¥ â€œ + ($list_devices.Count-2) + â€ å°Androidè®¾å¤‡ã€‚" + "`nå…¶ä¸­åŒ…å« â€œ + â€œ$wireless_countâ€ + â€ å°æ— çº¿è¿æ¥è®¾å¤‡ã€‚"
         return [int]( $list_devices.Count - 2 )
     }
     else
     {
-        $Console.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éADB»·¾³¡£"
+        $Console.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥ADBç¯å¢ƒã€‚"
     }
 }
 
 Function Export_bugreport
-#Èç¹ûÖ»Á¬½ÓÁËÒ»Ì¨Ô¶³ÌÉè±¸£¬Ôò²»µ¼³ö¡£ÒòÎªÔ¶³ÌÉè±¸µ¼³öµÄBugreportÎŞĞ§¡£
+#å¦‚æœåªè¿æ¥äº†ä¸€å°è¿œç¨‹è®¾å¤‡ï¼Œåˆ™ä¸å¯¼å‡ºã€‚å› ä¸ºè¿œç¨‹è®¾å¤‡å¯¼å‡ºçš„Bugreportæ— æ•ˆã€‚
 {
     $temp_dir = Get-Location
     switch ( ( $device_count = List_devices ) )
@@ -98,11 +98,11 @@ Function Export_bugreport
 
                 switch ( ( $list_devices ) )
                 {
-                    {$list_devices[1].Contains( ":" )}{$Console.Text = "Ô¶³ÌÉè±¸£¬²»ÓèÒÔµ¼³öÈÕÖ¾¡£";break}
-                    {$list_devices[1].Contains( "unauthorized" )}{$Console.Text = "Éè±¸Î´ÊÚÈ¨¡£";break}
+                    {$list_devices[1].Contains( ":" )}{$Console.Text = "è¿œç¨‹è®¾å¤‡ï¼Œä¸äºˆä»¥å¯¼å‡ºæ—¥å¿—ã€‚";break}
+                    {$list_devices[1].Contains( "unauthorized" )}{$Console.Text = "è®¾å¤‡æœªæˆæƒã€‚";break}
                     default
                     {
-                        $Console.Text = "ÕıÔÚµ¼³ö£¬´Ë¹ı³Ì»áºÄÊ±Êı·ÖÖÓ£¬ÇëÄÍĞÄµÈ´ı¡£`nµ¼³öÍê³ÉÇ°±¾¹¤¾ß²»¿Éµã»÷¡£"
+                        $Console.Text = "æ­£åœ¨å¯¼å‡ºï¼Œæ­¤è¿‡ç¨‹ä¼šè€—æ—¶æ•°åˆ†é’Ÿï¼Œè¯·è€å¿ƒç­‰å¾…ã€‚`nå¯¼å‡ºå®Œæˆå‰æœ¬å·¥å…·ä¸å¯ç‚¹å‡»ã€‚"
                         if ( Test-Path bugreport_log )
                         {
                             cd bugreport_log
@@ -123,21 +123,21 @@ Function Export_bugreport
                             adb bugreport > $filename
                         }
 
-                        $Console.Text = ¡°µ¼³öÍê³É£¡`n¡± + "BugreportÈÕÖ¾ÎÄ¼şÒÑ´æ·ÅÓÚ£º`n" + ( Get-Location )
+                        $Console.Text = â€œå¯¼å‡ºå®Œæˆï¼`nâ€ + "Bugreportæ—¥å¿—æ–‡ä»¶å·²å­˜æ”¾äºï¼š`n" + ( Get-Location )
                         cd $temp_dir
                         $ws = New-Object -ComObject WScript.Shell
-                        $wsi = $ws.popup(¡°µ¼³öÍê³É£¡¡±,0,$title,0 + 64)
+                        $wsi = $ws.popup(â€œå¯¼å‡ºå®Œæˆï¼â€,0,$title,0 + 64)
                         ;break
                     }
                 }
             }
             catch [System.Exception]
             {
-                $Console.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                $Console.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
             };break
           }
-        0 {$Console.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-        {$_ -ge 2 } {$Console.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡`nµ¼³öÊ±µçÄÔÉÏÖ»ÄÜÁ¬½ÓÒ»Ì¨AndroidÉè±¸¡£";break}
+        0 {$Console.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+        {$_ -ge 2 } {$Console.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼`nå¯¼å‡ºæ—¶ç”µè„‘ä¸Šåªèƒ½è¿æ¥ä¸€å°Androidè®¾å¤‡ã€‚";break}
     }
 }
 
@@ -147,26 +147,26 @@ Function Run_battery_historian
 
     if ( get-process | where-object {$_.Name -eq "battery-historian"} )
     {
-	    write-host "Battery-Historian ÒÑ¾­ÔÚÔËĞĞÁË¡£`n`nÇë·ÃÎÊ http://localhost:9999/" -ForegroundColor Red
-        $Console.Text = "Battery-Historian ÒÑ¾­ÔÚÔËĞĞÁË¡£`n`nÇë·ÃÎÊ http://localhost:9999/"
+	    write-host "Battery-Historian å·²ç»åœ¨è¿è¡Œäº†ã€‚`n`nè¯·è®¿é—® http://localhost:9999/" -ForegroundColor Red
+        $Console.Text = "Battery-Historian å·²ç»åœ¨è¿è¡Œäº†ã€‚`n`nè¯·è®¿é—® http://localhost:9999/"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("Battery-Historian ÒÑ¾­ÔÚÔËĞĞÁË¡£`n`nÇë·ÃÎÊ http://localhost:9999/",0,"PowerShell ÀÁÈË¹¤¾ßÏµÁĞ",0 + 64)
+	    $wsr = $ws.popup("Battery-Historian å·²ç»åœ¨è¿è¡Œäº†ã€‚`n`nè¯·è®¿é—® http://localhost:9999/",0,"PowerShell æ‡’äººå·¥å…·ç³»åˆ—",0 + 64)
         Start-Process -FilePath http://localhost:9999/
     }
 
     else
     {
-        $Console.Text = "Battery Historian ÕıÔÚÔËĞĞ¡£`nÇë·ÃÎÊ http://localhost:9999/"
+        $Console.Text = "Battery Historian æ­£åœ¨è¿è¡Œã€‚`nè¯·è®¿é—® http://localhost:9999/"
 	    $path = Get-Item -Path $env:GOPATH\src\github.com\google\battery-historian
 	    
         if ( $path -ne $null )
         {
             cd $path
-            Start-Process powershell.exe -ArgumentList "write-host Battery Historian ÕıÔÚÔËĞĞ£¬Çë²»Òª¹Ø±Õ´Ë´°¿Ú¡£ -ForegroundColor Yellow `ngo run cmd/battery-historian/battery-historian.go" -WindowStyle Minimized
+            Start-Process powershell.exe -ArgumentList "write-host Battery Historian æ­£åœ¨è¿è¡Œï¼Œè¯·ä¸è¦å…³é—­æ­¤çª—å£ã€‚ -ForegroundColor Yellow `ngo run cmd/battery-historian/battery-historian.go" -WindowStyle Minimized
         }
         else
         {
-            $Console.Text = "¹¤¾ß¶¼Ã»×°ÄãÔËĞĞ¸öÃ«Ïß£¡"
+            $Console.Text = "å·¥å…·éƒ½æ²¡è£…ä½ è¿è¡Œä¸ªæ¯›çº¿ï¼"
         }
         cd $temp_dir
     }
@@ -179,7 +179,7 @@ Function Show_devices_info
         1 {
             if ( $list_devices[1].Contains("unauthorized") )
             {    
-                $Info.Text = "Éè±¸ÉĞÎ´ÊÚÈ¨¡£"
+                $Info.Text = "è®¾å¤‡å°šæœªæˆæƒã€‚"
             }
             else
             {
@@ -197,17 +197,17 @@ Function Show_devices_info
                     $total_storage, $used_storage, $free_storage = Get_storage
                     $WIFI_stat = adb shell dumpsys wifi
                     $Device_date = adb shell date
-                    $Info.Text = "Android°æ±¾: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`nÆÁÄ»·Ö±æÂÊ: " + (isNull $Get_screen_res) + "`nÆÁÄ»DPI: " + (isNull $Get_screen_dpi) + "`nÖÆÔìÉÌ: " + (isNull $Get_manuf) + "`nĞÍºÅ: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPUºËĞÄÊı: " + $Get_cores.length + "`nÎïÀíÄÚ´æ: " + (isNull $Get_Mem).Substring(11).trim() + "`nÄÚ²¿´æ´¢¿Õ¼ä: " + $total_storage + "`nÒÑÓÃ¿Õ¼ä: " + $used_storage + "`nÊ£Óà¿Õ¼ä: " + $free_storage + "`n" + $WIFI_stat[0] + "`nÉè±¸Ê±¼ä: " + $Device_date
+                    $Info.Text = "Androidç‰ˆæœ¬: " + (isNull $Get_android_ver) + "`nAndroid API: " + (isNull $Get_android_API) + "`nå±å¹•åˆ†è¾¨ç‡: " + (isNull $Get_screen_res) + "`nå±å¹•DPI: " + (isNull $Get_screen_dpi) + "`nåˆ¶é€ å•†: " + (isNull $Get_manuf) + "`nå‹å·: " + (isNull $Get_model) + "`nCPU: " + (isNull $Get_CPU).Substring(11) + "`nCPUæ ¸å¿ƒæ•°: " + $Get_cores.length + "`nç‰©ç†å†…å­˜: " + (isNull $Get_Mem).Substring(11).trim() + "`nå†…éƒ¨å­˜å‚¨ç©ºé—´: " + $total_storage + "`nå·²ç”¨ç©ºé—´: " + $used_storage + "`nå‰©ä½™ç©ºé—´: " + $free_storage + "`n" + $WIFI_stat[0] + "`nè®¾å¤‡æ—¶é—´: " + $Device_date
                 }
                 catch [System.Exception]
                 {
-                    $Info.Text = "Ö´ĞĞÊ§°Ü£¬Çë¼ì²éÊÖ»úÁ¬½Ó»òADB»·¾³¡£"
+                    $Info.Text = "æ‰§è¡Œå¤±è´¥ï¼Œè¯·æ£€æŸ¥æ‰‹æœºè¿æ¥æˆ–ADBç¯å¢ƒã€‚"
                 }
             }
             ;break
           }
-        0 {$Info.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-        {$_ -ge 2 } {$Info.Text = "Á¬ÁËÕâÃ´¶àÌ¨Éè±¸£¬ÎÒÄÄÖªµÀÒª²éÄÄ¸ö¡£";break}
+        0 {$Info.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+        {$_ -ge 2 } {$Info.Text = "è¿äº†è¿™ä¹ˆå¤šå°è®¾å¤‡ï¼Œæˆ‘å“ªçŸ¥é“è¦æŸ¥å“ªä¸ªã€‚";break}
     }
 }
 
@@ -232,24 +232,24 @@ Function Get_storage
 Function Reboot
 {
     $ws = New-Object -ComObject WScript.Shell
-    $wsr = $ws.popup("¼´½«ÖØÆôÉè±¸£¬È·¶¨Òª¼ÌĞø£¿",0,$title,1 + 64)
+    $wsr = $ws.popup("å³å°†é‡å¯è®¾å¤‡ï¼Œç¡®å®šè¦ç»§ç»­ï¼Ÿ",0,$title,1 + 64)
 
     if ( $wsr -eq 1 )
     {
         switch ( ( $device_count = List_devices ) )
         {
             1 {
-                $Info.Text = "ÕıÔÚÖØÆô£¬ÇëÉÔºò¡£"
+                $Info.Text = "æ­£åœ¨é‡å¯ï¼Œè¯·ç¨å€™ã€‚"
                 adb reboot
-                $Info.Text = "ÒÑÖØÆô£¬Çë¼ì²éÉè±¸¡£";break
+                $Info.Text = "å·²é‡å¯ï¼Œè¯·æ£€æŸ¥è®¾å¤‡ã€‚";break
               }
-            0 {$Info.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Info.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡Ã»·¨ÖØÆô¡£";break}
+            0 {$Info.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Info.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼æ²¡æ³•é‡å¯ã€‚";break}
         }       
     }
     else
     {
-        $Info.Text = "ºÃºÃºÃ£¬²»ÖØÆôÁË¡£"
+        $Info.Text = "å¥½å¥½å¥½ï¼Œä¸é‡å¯äº†ã€‚"
     }
 }
 
@@ -289,12 +289,12 @@ Function Connect_devices
     $IP_label = New-Object System.Windows.Forms.Label
     $IP_label.Location = New-Object System.Drawing.Point(10,10)
     $IP_label.Size = New-Object System.Drawing.Size(300,20)
-    $IP_label.Text = "ÇëÊäÈëÕıÈ·¸ñÊ½µÄIPµØÖ·£º"
+    $IP_label.Text = "è¯·è¾“å…¥æ­£ç¡®æ ¼å¼çš„IPåœ°å€ï¼š"
 
     $Port_label = New-Object System.Windows.Forms.Label
     $Port_label.Location = New-Object System.Drawing.Point(10,70)
     $Port_label.Size = New-Object System.Drawing.Size(300,20)
-    $Port_label.Text = "ÇëÊäÈëÕıÈ·¸ñÊ½µÄ¶Ë¿ÚºÅ£¨¿ÉÑ¡£©£º"
+    $Port_label.Text = "è¯·è¾“å…¥æ­£ç¡®æ ¼å¼çš„ç«¯å£å·ï¼ˆå¯é€‰ï¼‰ï¼š"
 
     $Port = New-Object System.Windows.Forms.TextBox
     $Port.Location = New-Object System.Drawing.Point(15,90) 
@@ -306,7 +306,7 @@ Function Connect_devices
     $Do_Connect = New-Object System.Windows.Forms.Button
     $Do_Connect.Location = New-Object System.Drawing.Point(180,100)
     $Do_Connect.Size = New-Object System.Drawing.Size(80,40)
-    $Do_Connect.Text = "¿ªÊ¼Á¬½Ó"
+    $Do_Connect.Text = "å¼€å§‹è¿æ¥"
     $Do_Connect.add_click( {Do_Connect $IP.Text $Port.Text } )
 
     $ConnectForm.Controls.Add($IP)
@@ -332,35 +332,35 @@ Function Do_Connect($ip, $port)
                 $temp_result = adb connect ${ip}:${port}
                 if ( $temp_result.Contains( "connected to" ) )
                 {
-                    $Info.Text = "ÒÑÁ¬½Ó³É¹¦¡£"
-                    $wsr = $ws.popup("ÒÑÁ¬½Ó³É¹¦¡£",0,$title,0 + 64)
+                    $Info.Text = "å·²è¿æ¥æˆåŠŸã€‚"
+                    $wsr = $ws.popup("å·²è¿æ¥æˆåŠŸã€‚",0,$title,0 + 64)
                     $ConnectForm.Close()
                 }
                 else
                 {
-                    $Info.Text = "Á¬½ÓÊ§°Ü£¬Çë¼ì²éIPµØÖ·¡¢¶Ë¿ÚºÅ»òWIFIÉèÖÃ¡£"
-                    $wsr = $ws.popup("Á¬½ÓÊ§°Ü£¬Çë¼ì²éIPµØÖ·¡¢¶Ë¿ÚºÅ»òWIFIÉèÖÃ¡£",0,$title,0 + 64)
+                    $Info.Text = "è¿æ¥å¤±è´¥ï¼Œè¯·æ£€æŸ¥IPåœ°å€ã€ç«¯å£å·æˆ–WIFIè®¾ç½®ã€‚"
+                    $wsr = $ws.popup("è¿æ¥å¤±è´¥ï¼Œè¯·æ£€æŸ¥IPåœ°å€ã€ç«¯å£å·æˆ–WIFIè®¾ç½®ã€‚",0,$title,0 + 64)
                 }
             }
             else
             {
-                $Info.Text = "ÇëÌîĞ´ÕıÈ·¸ñÊ½µÄ¶Ë¿ÚºÅ¡£"
+                $Info.Text = "è¯·å¡«å†™æ­£ç¡®æ ¼å¼çš„ç«¯å£å·ã€‚"
                 
-	            $wsr = $ws.popup("ÇëÌîĞ´ÕıÈ·¸ñÊ½µÄ¶Ë¿ÚºÅ¡£",0,$title,0 + 64)
+	            $wsr = $ws.popup("è¯·å¡«å†™æ­£ç¡®æ ¼å¼çš„ç«¯å£å·ã€‚",0,$title,0 + 64)
             }
         }
         else
         {
-            $Info.Text = "ÇëÌîĞ´ÕıÈ·¸ñÊ½µÄIPµØÖ·¡£"
+            $Info.Text = "è¯·å¡«å†™æ­£ç¡®æ ¼å¼çš„IPåœ°å€ã€‚"
             $ws = New-Object -ComObject WScript.Shell
-	        $wsr = $ws.popup("ÇëÌîĞ´ÕıÈ·¸ñÊ½µÄIPµØÖ·¡£",0,$title,0 + 64)
+	        $wsr = $ws.popup("è¯·å¡«å†™æ­£ç¡®æ ¼å¼çš„IPåœ°å€ã€‚",0,$title,0 + 64)
         }
     }
     else
     {
-        $Info.Text = "IPµØÖ·Î´ÌîĞ´¡£"
+        $Info.Text = "IPåœ°å€æœªå¡«å†™ã€‚"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("IPµØÖ·Î´ÌîĞ´¡£",0,$title,0 + 64)
+	    $wsr = $ws.popup("IPåœ°å€æœªå¡«å†™ã€‚",0,$title,0 + 64)
     }
 }
 
@@ -369,13 +369,13 @@ Function Disconnect
     try
     {
         adb disconnect
-        $Info.Text = "ËùÓĞÁ¬½ÓµÄÔ¶³ÌÉè±¸¾ùÒÑ¶Ï¿ª¡£"
+        $Info.Text = "æ‰€æœ‰è¿æ¥çš„è¿œç¨‹è®¾å¤‡å‡å·²æ–­å¼€ã€‚"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("ËùÓĞÁ¬½ÓµÄÔ¶³ÌÉè±¸¾ùÒÑ¶Ï¿ª¡£",0,$title,0 + 64)
+	    $wsr = $ws.popup("æ‰€æœ‰è¿æ¥çš„è¿œç¨‹è®¾å¤‡å‡å·²æ–­å¼€ã€‚",0,$title,0 + 64)
     }
     catch [System.Exception]
     {
-        $Info.Text = "¶Ï¿ªÒì³£¡£"
+        $Info.Text = "æ–­å¼€å¼‚å¸¸ã€‚"
     }
 }
 
@@ -384,8 +384,8 @@ Function ListPackage
     switch ( ( $device_count = List_devices ) )
 	{
         1 {$Info.Text = adb shell pm list package;break}
-        0 {$Info.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-        {$_ -ge 2} {$Info.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+        0 {$Info.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+        {$_ -ge 2} {$Info.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
     }
 }
 
@@ -394,8 +394,8 @@ Function Press_key($keycode)
     switch ( ( $device_count = List_devices ) )
 	    {
             1 {$Warning_label.Text = "";adb shell input keyevent $keycode;break}
-            0 {$Warning_label.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Warning_label.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+            0 {$Warning_label.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Warning_label.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
         }
 }
 
@@ -404,8 +404,8 @@ Function Swipe_screen($start_x, $start_y, $end_x, $end_y)
     switch ( ( $device_count = List_devices ) )
 	    {
             1 {$Warning_label.Text = "";adb shell input swipe $start_x $start_y $end_x $end_y;break}
-            0 {$Warning_label.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Warning_label.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+            0 {$Warning_label.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Warning_label.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
         }
 }
 
@@ -418,15 +418,15 @@ Function Screen_cap
             1 {
                 try
                 {
-                    $Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; $wsr = $ws.popup( "½ØÆÁ³É¹¦£¡Í¼Æ¬±£´æÔÚ" + (Get-Location) + "\" + $imagename,0,$title,0 + 64); break
+                    $Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; $wsr = $ws.popup( "æˆªå±æˆåŠŸï¼å›¾ç‰‡ä¿å­˜åœ¨" + (Get-Location) + "\" + $imagename,0,$title,0 + 64); break
                 }
                 catch [System.Exception]
                 {
-                    $Warning_label.Text = "½ØÍ¼±£´æÊ§°Ü£¬Çë¼ì²éÄ¿±ê´ÅÅÌ¡£"
+                    $Warning_label.Text = "æˆªå›¾ä¿å­˜å¤±è´¥ï¼Œè¯·æ£€æŸ¥ç›®æ ‡ç£ç›˜ã€‚"
                 }
                }
-            0 {$Warning_label.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Warning_label.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+            0 {$Warning_label.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Warning_label.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
         }
 }
 
@@ -435,8 +435,8 @@ Function SetBrightness($value)
     switch ( ( $device_count = List_devices ) )
 	{
         1 {$Warning_label.Text = "";adb shell settings put system screen_brightness $value;break}
-        0 {$Warning_label.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-        {$_ -ge 2} {$Warning_label.Text = "Á¬½ÓÁËÌ«¶àAndroidÉè±¸À²£¡";break}
+        0 {$Warning_label.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+        {$_ -ge 2} {$Warning_label.Text = "è¿æ¥äº†å¤ªå¤šAndroidè®¾å¤‡å•¦ï¼";break}
     }
 }
 
@@ -450,14 +450,14 @@ Function Logcat( $param )
                 switch ( $param )
                     {
                         {$param -eq "snap"}{$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time));break}
-                        {$param -eq "clear"}{adb logcat -c;$Log.Text = "Éè±¸ÉÏµÄLogCatÒÑÇå¿Õ¡£";$wsr = $ws.popup("Éè±¸ÉÏµÄLogCatÒÑÇå¿Õ¡£",0,$title,0 + 64);break}
-                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCatÈÕÖ¾ÒÑµ¼³ö¡£`nÈÕÖ¾ÒÑµ¼³öÖÁ:`n" + (Get-Location) + "\" + $logcatname);$wsr = $ws.popup("LogCatÈÕÖ¾ÒÑµ¼³ö",0,$title,0 + 64);break}
+                        {$param -eq "clear"}{adb logcat -c;$Log.Text = "è®¾å¤‡ä¸Šçš„LogCatå·²æ¸…ç©ºã€‚";$wsr = $ws.popup("è®¾å¤‡ä¸Šçš„LogCatå·²æ¸…ç©ºã€‚",0,$title,0 + 64);break}
+                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCatæ—¥å¿—å·²å¯¼å‡ºã€‚`næ—¥å¿—å·²å¯¼å‡ºè‡³:`n" + (Get-Location) + "\" + $logcatname);$wsr = $ws.popup("LogCatæ—¥å¿—å·²å¯¼å‡º",0,$title,0 + 64);break}
                         {$param -eq "trace"}{
                                                 $trace_result = adb shell ls /data/anr
 
                                                 if ($trace_result -eq $null)
                                                 {
-                                                    $Log.Text = "·ÃÎÊ±»¾Ü¾ø£¬ÎŞÈ¨ÏŞ¡£";break
+                                                    $Log.Text = "è®¿é—®è¢«æ‹’ç»ï¼Œæ— æƒé™ã€‚";break
                                                 }
 
                                                 for ($i = 0;$i -lt $trace_result.Length;$i++)
@@ -465,24 +465,24 @@ Function Logcat( $param )
                                                     if ($trace_result[$i].toString() -eq "traces.txt")
                                                     {
                                                         adb pull /data/anr/traces.txt
-                                                        $Log.Text = ("ANR traceÎÄ¼şÒÑµ¼³ö¡£`nÒÑµ¼³öÖÁ:`n" + (Get-Location) + "\traces.txt");$wsr = $ws.popup("ANR traceÎÄ¼şÒÑµ¼³ö",0,$title,0 + 64);break
+                                                        $Log.Text = ("ANR traceæ–‡ä»¶å·²å¯¼å‡ºã€‚`nå·²å¯¼å‡ºè‡³:`n" + (Get-Location) + "\traces.txt");$wsr = $ws.popup("ANR traceæ–‡ä»¶å·²å¯¼å‡º",0,$title,0 + 64);break
                                                     }
                                                     elseif ($trace_result[$i].toString() -eq "traces.txt.bugreport")
                                                     {
                                                         adb pull /data/anr/traces.txt.bugreport
-                                                        $Log.Text = ("traceÎÄ¼ş²»´æÔÚ£¬µ¼³ötrace.txt.bugreportÎÄ¼ş¡£`nÒÑµ¼³öÖÁ:`n" + (Get-Location) + "\traces.txt.bugreport");$wsr = $ws.popup("trace.txt.bugreportÎÄ¼şÒÑµ¼³ö",0,$title,0 + 64);break
+                                                        $Log.Text = ("traceæ–‡ä»¶ä¸å­˜åœ¨ï¼Œå¯¼å‡ºtrace.txt.bugreportæ–‡ä»¶ã€‚`nå·²å¯¼å‡ºè‡³:`n" + (Get-Location) + "\traces.txt.bugreport");$wsr = $ws.popup("trace.txt.bugreportæ–‡ä»¶å·²å¯¼å‡º",0,$title,0 + 64);break
                                                     }
                                                     else
                                                     {
-                                                        $Log.Text = "traceÎÄ¼ş²»´æÔÚ£¬Çë¼ì²éÆäÊÇ·ñÉú³É»òÊÇ·ñÓĞÏàÓ¦È¨ÏŞ¡£";break
+                                                        $Log.Text = "traceæ–‡ä»¶ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥å…¶æ˜¯å¦ç”Ÿæˆæˆ–æ˜¯å¦æœ‰ç›¸åº”æƒé™ã€‚";break
                                                     }
                                                 };break
                                             }
                         default{$Log.Text = "?????"}
                     };break
               }
-            0 {$Log.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-            {$_ -ge 2} {$Log.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡";break}
+            0 {$Log.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+            {$_ -ge 2} {$Log.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼";break}
         } 
     
 }
@@ -492,8 +492,8 @@ Function FilterLog($keyword)
     switch (( $device_count = List_devices ))
     {
         1 {$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}));break}
-        0 {$Log.Text = "Ã»ÕÒµ½Éè±¸¡£";break}
-        {$_ -ge 2} {$Log.Text = "Á¬½ÓÁËÌ«¶àÉè±¸À²£¡";break}
+        0 {$Log.Text = "æ²¡æ‰¾åˆ°è®¾å¤‡ã€‚";break}
+        {$_ -ge 2} {$Log.Text = "è¿æ¥äº†å¤ªå¤šè®¾å¤‡å•¦ï¼";break}
     }
 }
 
@@ -515,7 +515,7 @@ Function GetMD5($filepath)
 Function ShowOpenFileDialog
 {
     $dialog = New-Object -TypeName Microsoft.Win32.OpenFileDialog
-    $dialog.Title = 'Ñ¡ÔñAPKÎÄ¼ş'
+    $dialog.Title = 'é€‰æ‹©APKæ–‡ä»¶'
     $dialog.InitialDirectory = [Environment]::GetFolderPath('MyDocuments')
     $dialog.Filter = 'APK files|*.apk|All|*.*'
 
@@ -591,12 +591,12 @@ Function About
     $Author_label = New-Object System.Windows.Forms.Label
     $Author_label.Location = New-Object System.Drawing.Point(20,80)
     $Author_label.Size = New-Object System.Drawing.Size(200,20)
-    $Author_label.Text = "×÷Õß£ºÌïÏş¶«"
+    $Author_label.Text = "ä½œè€…ï¼šç”°æ™“ä¸œ"
 
     $Version_label = New-Object System.Windows.Forms.Label
     $Version_label.Location = New-Object System.Drawing.Point(20,50)
     $Version_label.Size = New-Object System.Drawing.Size(200,20)
-    $Version_label.Text = "°æ±¾£º " + $Global:version
+    $Version_label.Text = "ç‰ˆæœ¬ï¼š " + $Global:version
 
     $Name_label = New-Object System.Windows.Forms.Label
     $Name_label.Location = New-Object System.Drawing.Point(20,20)
@@ -604,19 +604,19 @@ Function About
     $Name_label.Text = "PowerShell Tool Box"
 
     $OK_button = New-Object System.Windows.Forms.Button
-    $OK_button.Text = "Å£B!!"
+    $OK_button.Text = "ç‰›B!!"
     $OK_button.Location = New-Object System.Drawing.Point(200,60)
     $OK_button.Size = New-Object System.Drawing.Size(60,40)
     $OK_button.add_Click({$AboutForm.Close()})
 
     $HomePage_button = New-Object System.Windows.Forms.Button
-    $HomePage_button.Text = "·ÃÎÊÏîÄ¿Ö÷Ò³"
+    $HomePage_button.Text = "è®¿é—®é¡¹ç›®ä¸»é¡µ"
     $HomePage_button.Location = New-Object System.Drawing.Point(20,120)
     $HomePage_button.Size = New-Object System.Drawing.Size(100,30)
     $HomePage_button.add_Click({Start-Process -FilePath https://github.com/titan1983/PowerShellToolBox})
 
     $Mail_button = New-Object System.Windows.Forms.Button
-    $Mail_button.Text = "·¢¸öÓÊ¼ş¸ø×÷Õß"
+    $Mail_button.Text = "å‘ä¸ªé‚®ä»¶ç»™ä½œè€…"
     $Mail_button.Location = New-Object System.Drawing.Point(160,120)
     $Mail_button.Size = New-Object System.Drawing.Size(100,30)
     $Mail_button.add_Click({Start-Process -FilePath mailto:titan_1983@163.com})
@@ -644,7 +644,7 @@ Function StartUp
     $MainForm.ShowInTaskbar = $True
     $MainForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::Fixed3D
 
-    #ÕâÊÇ¸ö²»¿É¼ûµÄ¿Ø¼ş£¬ÊÇTabÒ³¿Ø¼şµÄÈİÆ÷£¬ËùÒÔÃû³ÆÊ¹ÓÃÁËĞ¡Ğ´¿ªÍ·¡£
+    #è¿™æ˜¯ä¸ªä¸å¯è§çš„æ§ä»¶ï¼Œæ˜¯Tabé¡µæ§ä»¶çš„å®¹å™¨ï¼Œæ‰€ä»¥åç§°ä½¿ç”¨äº†å°å†™å¼€å¤´ã€‚
     $tabControl = New-Object System.Windows.Forms.TabControl
     $tabControl.Location = New-Object System.Drawing.Point(0, 10);
     $tabControl.SelectedIndex = 0;
@@ -662,120 +662,120 @@ Function StartUp
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_power.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_power.TabIndex = 0;
-    $Tab_power.Text = "¹¦ºÄÆÀ²âÏà¹Ø";
+    $Tab_power.Text = "åŠŸè€—è¯„æµ‹ç›¸å…³";
     $Tab_power.UseVisualStyleBackColor = "true";
 
     $Tab_adb_tools.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_adb_tools.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_adb_tools.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_adb_tools.TabIndex = 0;
-    $Tab_adb_tools.Text = "ADB³£ÓÃ¹¤¾ß";
+    $Tab_adb_tools.Text = "ADBå¸¸ç”¨å·¥å…·";
     $Tab_adb_tools.UseVisualStyleBackColor = "true";
 
     $Tab_logcat.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_logcat.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_logcat.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_logcat.TabIndex = 0;
-    $Tab_logcat.Text = "Logcat¿ìÕÕ";
+    $Tab_logcat.Text = "Logcatå¿«ç…§";
     $Tab_logcat.UseVisualStyleBackColor = "true";
 
     $Tab_option.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_option.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_option.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_option.TabIndex = 0;
-    $Tab_option.Text = "ÊÖ»úÄ£Äâ²Ù×÷";
+    $Tab_option.Text = "æ‰‹æœºæ¨¡æ‹Ÿæ“ä½œ";
     $Tab_option.UseVisualStyleBackColor = "true";
 
     $Tab_apk_info.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_apk_info.Padding = New-Object System.Windows.Forms.Padding(3);
     $Tab_apk_info.Size = New-Object System.Drawing.Size(700, 400);
     $Tab_apk_info.TabIndex = 0;
-    $Tab_apk_info.Text = "APKĞÅÏ¢²éÑ¯";
+    $Tab_apk_info.Text = "APKä¿¡æ¯æŸ¥è¯¢";
     $Tab_apk_info.UseVisualStyleBackColor = "true";
     $Tab_apk_info.AllowDrop = $True
 
-    #ÒÔÏÂÎªtab_powerÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_poweré¡µçš„å…ƒç´ 
     $Init_Button = New-Object System.Windows.Forms.Button
     $Init_Button.Location = New-Object System.Drawing.Point(560,40)
     $Init_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Init_Button.Text = "¹¦ºÄÆÀ²â³õÊ¼»¯"
+    $Init_Button.Text = "åŠŸè€—è¯„æµ‹åˆå§‹åŒ–"
     $Init_Button.add_click( {Init_power} )
 
     $List_Button = New-Object System.Windows.Forms.Button
     $List_Button.Location = New-Object System.Drawing.Point(560,100)
     $List_Button.Size = New-Object System.Drawing.Size(120,40)
-    $List_Button.Text = "ÒÑÁ¬½ÓAndroidÉè±¸"
+    $List_Button.Text = "å·²è¿æ¥Androidè®¾å¤‡"
     $List_Button.add_click( {List_devices} )
 
     $Export_bugreport_Button = New-Object System.Windows.Forms.Button
     $Export_bugreport_Button.Location = New-Object System.Drawing.Point(560,160)
     $Export_bugreport_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Export_bugreport_Button.Text = "µ¼³öBugreportÈÕÖ¾"
+    $Export_bugreport_Button.Text = "å¯¼å‡ºBugreportæ—¥å¿—"
     $Export_bugreport_Button.add_click( {Export_bugreport} )
 
     $Run_batt_Button = New-Object System.Windows.Forms.Button
     $Run_batt_Button.Location = New-Object System.Drawing.Point(560,220)
     $Run_batt_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Run_batt_Button.Text = "ÔËĞĞ`nBattery-Historian"
+    $Run_batt_Button.Text = "è¿è¡Œ`nBattery-Historian"
     $Run_batt_Button.add_click( {Run_battery_historian} )
 
     $Console = New-Object System.Windows.Forms.RichTextBox
     $Console.Location = New-Object System.Drawing.Point(20,40) 
     $Console.Size = New-Object System.Drawing.Size(500,340) 
     $Console.ReadOnly = $True
-    $Console.Text = "Ö´ĞĞ½á¹ûÏÔÊ¾ÔÚÕâÀï"
+    $Console.Text = "æ‰§è¡Œç»“æœæ˜¾ç¤ºåœ¨è¿™é‡Œ"
     $Console.WordWrap = $True
     $Console.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Console.BackColor = ([System.Drawing.Color]::Black)
     $Console.Font = New-Object System.Drawing.Font("Microsoft YaHei",16,[System.Drawing.FontStyle]::Regular)
 
-    #ÒÔÏÂÎªtab_adb_toolsÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_adb_toolsé¡µçš„å…ƒç´ 
     $Show_devices_info_Button = New-Object System.Windows.Forms.Button
     $Show_devices_info_Button.Location = New-Object System.Drawing.Point(560,40)
     $Show_devices_info_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Show_devices_info_Button.Text = "ÏÔÊ¾Éè±¸ĞÅÏ¢"
+    $Show_devices_info_Button.Text = "æ˜¾ç¤ºè®¾å¤‡ä¿¡æ¯"
     $Show_devices_info_Button.add_click( {Show_devices_info} )
 
     $Reboot_Button = New-Object System.Windows.Forms.Button
     $Reboot_Button.Location = New-Object System.Drawing.Point(560,100)
     $Reboot_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Reboot_Button.Text = "ÖØÆôAndroidÉè±¸"
+    $Reboot_Button.Text = "é‡å¯Androidè®¾å¤‡"
     $Reboot_Button.add_click( {Reboot} )
 
     $Connect_Button = New-Object System.Windows.Forms.Button
     $Connect_Button.Location = New-Object System.Drawing.Point(560,160)
     $Connect_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Connect_Button.Text = "Ô¶³ÌÁ¬½Ó`nAndroidÉè±¸"
+    $Connect_Button.Text = "è¿œç¨‹è¿æ¥`nAndroidè®¾å¤‡"
     $Connect_Button.add_click( {Connect_devices} )
 
     $Disconnect_Button = New-Object System.Windows.Forms.Button
     $Disconnect_Button.Location = New-Object System.Drawing.Point(560,220)
     $Disconnect_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Disconnect_Button.Text = "¶Ï¿ªËùÓĞÔ¶³ÌÉè±¸"
+    $Disconnect_Button.Text = "æ–­å¼€æ‰€æœ‰è¿œç¨‹è®¾å¤‡"
     $Disconnect_Button.add_click( {Disconnect} )
 
     $ListPackage_Button = New-Object System.Windows.Forms.Button
     $Listpackage_Button.Location = New-Object System.Drawing.Point(560,280)
     $Listpackage_Button.Size = New-Object System.Drawing.Size(120,40)
-    $Listpackage_Button.Text = "ÒÑ°²×°Ó¦ÓÃÁĞ±í"
+    $Listpackage_Button.Text = "å·²å®‰è£…åº”ç”¨åˆ—è¡¨"
     $Listpackage_Button.add_click( {ListPackage} )
 
     $Info = New-Object System.Windows.Forms.RichTextBox
     $Info.Location = New-Object System.Drawing.Point(20,40) 
     $Info.Size = New-Object System.Drawing.Size(500,340) 
     $Info.ReadOnly = $True
-    $Info.Text = "ÄãÏë¿´µãÉ¶£¿"
+    $Info.Text = "ä½ æƒ³çœ‹ç‚¹å•¥ï¼Ÿ"
     $Info.WordWrap = $True
     $Info.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Info.BackColor = ([System.Drawing.Color]::Black)
     $Info.Font = New-Object System.Drawing.Font("Microsoft YaHei",16,[System.Drawing.FontStyle]::Regular)
 
-    #ÒÔÏÂÎªtab_logcatÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_logcaté¡µçš„å…ƒç´ 
     $Log = New-Object System.Windows.Forms.RichTextBox
     $Log.Location = New-Object System.Drawing.Point(20,60) 
     $Log.Size = New-Object System.Drawing.Size(650,280) 
     $Log.ReadOnly = $True
-    $Log.Text = "==== LogCat¿ìÕÕ ===="
+    $Log.Text = "==== LogCatå¿«ç…§ ===="
     $Log.WordWrap = $True
     $Log.ForeColor = ([System.Drawing.Color]::LawnGreen)
     $Log.BackColor = ([System.Drawing.Color]::Black)
@@ -783,37 +783,37 @@ Function StartUp
     $Log_snap_Button = New-Object System.Windows.Forms.Button
     $Log_snap_Button.Location = New-Object System.Drawing.Point(20,10)
     $Log_snap_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Log_snap_Button.Text = "×¥È¡LOGCAT¿ìÕÕ"
+    $Log_snap_Button.Text = "æŠ“å–LOGCATå¿«ç…§"
     $Log_snap_Button.add_click( {Logcat "snap"} )
 
     $Log_clear_Button = New-Object System.Windows.Forms.Button
     $Log_clear_Button.Location = New-Object System.Drawing.Point(160,10)
     $Log_clear_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Log_clear_Button.Text = "Çå³ıLOGCATÈÕÖ¾"
+    $Log_clear_Button.Text = "æ¸…é™¤LOGCATæ—¥å¿—"
     $Log_clear_Button.add_click( {Logcat "clear"} )
 
     $Log_export_Button = New-Object System.Windows.Forms.Button
     $Log_export_Button.Location = New-Object System.Drawing.Point(300,10)
     $Log_export_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Log_export_Button.Text = "µ¼³öLOGCATÈÕÖ¾"
+    $Log_export_Button.Text = "å¯¼å‡ºLOGCATæ—¥å¿—"
     $Log_export_Button.add_click( {Logcat "export"} )
 
     $Trace_export_Button = New-Object System.Windows.Forms.Button
     $Trace_export_Button.Location = New-Object System.Drawing.Point(440,10)
     $Trace_export_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Trace_export_Button.Text = "µ¼³ötraceÎÄ¼ş"
+    $Trace_export_Button.Text = "å¯¼å‡ºtraceæ–‡ä»¶"
     $Trace_export_Button.add_click( {Logcat "trace"} )
 
     $Clear_console_Button = New-Object System.Windows.Forms.Button
     $Clear_console_Button.Location = New-Object System.Drawing.Point(580,10)
     $Clear_console_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Clear_console_Button.Text = "ÇåÆÁ"
-    $Clear_console_Button.add_click( {$Log.Text = "==== LogCat¿ìÕÕ ===="} )
+    $Clear_console_Button.Text = "æ¸…å±"
+    $Clear_console_Button.add_click( {$Log.Text = "==== LogCatå¿«ç…§ ===="} )
 
     $Log_filter_Button = New-Object System.Windows.Forms.Button
     $Log_filter_Button.Location = New-Object System.Drawing.Point(20,340)
     $Log_filter_Button.Size = New-Object System.Drawing.Size(60,30)
-    $Log_filter_Button.Text = "¹ıÂË"
+    $Log_filter_Button.Text = "è¿‡æ»¤"
     $Log_filter_Button.add_click( {FilterLog $Filter_box.Text.toString()} )
 
     $Filter_box = New-Object System.Windows.Forms.RichTextBox
@@ -826,7 +826,7 @@ Function StartUp
     $Filter_box.BackColor = ([System.Drawing.Color]::Blue)
     $Filter_box.Font = New-Object System.Drawing.Font("Tahoma",12,[System.Drawing.FontStyle]::Bold)
 
-    #ÒÔÏÂÎªtab_optionÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_optioné¡µçš„å…ƒç´ 
     $Home_Button = New-Object System.Windows.Forms.Button
     $Home_Button.Location = New-Object System.Drawing.Point(200,300)
     $Home_Button.Size = New-Object System.Drawing.Size(100,40)
@@ -866,44 +866,44 @@ Function StartUp
     $Swipe_up_Button = New-Object System.Windows.Forms.Button
     $Swipe_up_Button.Location = New-Object System.Drawing.Point(200,40)
     $Swipe_up_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Swipe_up_Button.Text = "ÏòÉÏ»¬¶¯"
+    $Swipe_up_Button.Text = "å‘ä¸Šæ»‘åŠ¨"
     $Swipe_up_Button.add_click( {Swipe_screen 500 800 500 200} )
 
     $Swipe_down_Button = New-Object System.Windows.Forms.Button
     $Swipe_down_Button.Location = New-Object System.Drawing.Point(200,200)
     $Swipe_down_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Swipe_down_Button.Text = "ÏòÏÂ»¬¶¯"
+    $Swipe_down_Button.Text = "å‘ä¸‹æ»‘åŠ¨"
     $Swipe_down_Button.add_click( {Swipe_screen 500 300 500 800} )
 
     $Swipe_left_Button = New-Object System.Windows.Forms.Button
     $Swipe_left_Button.Location = New-Object System.Drawing.Point(60,120)
     $Swipe_left_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Swipe_left_Button.Text = "Ïò×ó»¬¶¯"
+    $Swipe_left_Button.Text = "å‘å·¦æ»‘åŠ¨"
     $Swipe_left_Button.add_click( {Swipe_screen 500 500 100 500} )
 
     $Swipe_right_Button = New-Object System.Windows.Forms.Button
     $Swipe_right_Button.Location = New-Object System.Drawing.Point(340,120)
     $Swipe_right_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Swipe_right_Button.Text = "ÏòÓÒ»¬¶¯"
+    $Swipe_right_Button.Text = "å‘å³æ»‘åŠ¨"
     $Swipe_right_Button.add_click( {Swipe_screen 100 500 500 500} )
 
     $Screen_cap_Button = New-Object System.Windows.Forms.Button
     $Screen_cap_Button.Location = New-Object System.Drawing.Point(200,120)
     $Screen_cap_Button.Size = New-Object System.Drawing.Size(100,40)
-    $Screen_cap_Button.Text = "ÆÁÄ»½ØÍ¼"
+    $Screen_cap_Button.Text = "å±å¹•æˆªå›¾"
     $Screen_cap_Button.add_click( {Screen_cap} )
 
     $Brightness_Max_Button = New-Object System.Windows.Forms.Button
     $Brightness_Max_Button.Location = New-Object System.Drawing.Point(520,260)
     $Brightness_Max_Button.Size = New-Object System.Drawing.Size(90,30)
-    $Brightness_Max_Button.Text = "ÆÁÄ»µ÷ÖÁ×îÁÁ"
+    $Brightness_Max_Button.Text = "å±å¹•è°ƒè‡³æœ€äº®"
     $Brightness_Max_Button.add_click( {SetBrightness 255} )
 
 
     $Brightness_Min_Button = New-Object System.Windows.Forms.Button
     $Brightness_Min_Button.Location = New-Object System.Drawing.Point(520,300)
     $Brightness_Min_Button.Size = New-Object System.Drawing.Size(90,30)
-    $Brightness_Min_Button.Text = "ÆÁÄ»µ÷ÖÁ×î°µ"
+    $Brightness_Min_Button.Text = "å±å¹•è°ƒè‡³æœ€æš—"
     $Brightness_Min_Button.add_click( {SetBrightness 1} )
 
 
@@ -914,11 +914,11 @@ Function StartUp
     $Warning_label.ForeColor = "Red"
     $Warning_label.Font = New-Object System.Drawing.Font("Tahoma",12,[System.Drawing.FontStyle]::Bold)
 
-    #ÒÔÏÂÎªtab_apk_infoÒ³µÄÔªËØ
+    #ä»¥ä¸‹ä¸ºtab_apk_infoé¡µçš„å…ƒç´ 
     $OpenFile_button = New-Object System.Windows.Forms.Button
     $OpenFile_button.Location = New-Object System.Drawing.Point(580,300)
     $OpenFile_button.Size = New-Object System.Drawing.Size(90,40)
-    $OpenFile_button.Text = "´ò¿ªAPKÎÄ¼ş"
+    $OpenFile_button.Text = "æ‰“å¼€APKæ–‡ä»¶"
     $OpenFile_button.add_click( {ShowOpenFileDialog} )
 
     $APK_name = New-Object System.Windows.Forms.RichTextBox
@@ -932,7 +932,7 @@ Function StartUp
     $APK_name_label = New-Object System.Windows.Forms.Label
     $APK_name_label.Location = New-Object System.Drawing.Point(20,20)
     $APK_name_label.Size = New-Object System.Drawing.Size(100,25)
-    $APK_name_label.Text = "Ó¦ÓÃÃû³Æ£º"
+    $APK_name_label.Text = "åº”ç”¨åç§°ï¼š"
 
     $APK_path = New-Object System.Windows.Forms.RichTextBox
     $APK_path.Location = New-Object System.Drawing.Point(120,280) 
@@ -945,7 +945,7 @@ Function StartUp
     $APK_path_label = New-Object System.Windows.Forms.Label
     $APK_path_label.Location = New-Object System.Drawing.Point(20,280)
     $APK_path_label.Size = New-Object System.Drawing.Size(100,25)
-    $APK_path_label.Text = "APKÂ·¾¶£º"
+    $APK_path_label.Text = "APKè·¯å¾„ï¼š"
 
     $APK_size = New-Object System.Windows.Forms.RichTextBox
     $APK_size.Location = New-Object System.Drawing.Point(120,340) 
@@ -958,7 +958,7 @@ Function StartUp
     $APK_size_label = New-Object System.Windows.Forms.Label
     $APK_size_label.Location = New-Object System.Drawing.Point(20,340)
     $APK_size_label.Size = New-Object System.Drawing.Size(100,25)
-    $APK_size_label.Text = "APKÎÄ¼ş´óĞ¡£º"
+    $APK_size_label.Text = "APKæ–‡ä»¶å¤§å°ï¼š"
 
     $Package_name = New-Object System.Windows.Forms.RichTextBox
     $Package_name.Location = New-Object System.Drawing.Point(120,60) 
@@ -971,7 +971,7 @@ Function StartUp
     $Package_name_label = New-Object System.Windows.Forms.Label
     $Package_name_label.Location = New-Object System.Drawing.Point(20,60)
     $Package_name_label.Size = New-Object System.Drawing.Size(100,25)
-    $Package_name_label.Text = "APK°üÃû£º"
+    $Package_name_label.Text = "APKåŒ…åï¼š"
 
     $Version_name = New-Object System.Windows.Forms.RichTextBox
     $Version_name.Location = New-Object System.Drawing.Point(120,100) 
@@ -984,7 +984,7 @@ Function StartUp
     $Version_name_label = New-Object System.Windows.Forms.Label
     $Version_name_label.Location = New-Object System.Drawing.Point(20,100)
     $Version_name_label.Size = New-Object System.Drawing.Size(100,25)
-    $Version_name_label.Text = "Version Name£º"
+    $Version_name_label.Text = "Version Nameï¼š"
 
     $Version_code = New-Object System.Windows.Forms.RichTextBox
     $Version_code.Location = New-Object System.Drawing.Point(120,140) 
@@ -997,7 +997,7 @@ Function StartUp
     $Version_code_label = New-Object System.Windows.Forms.Label
     $Version_code_label.Location = New-Object System.Drawing.Point(20,140)
     $Version_code_label.Size = New-Object System.Drawing.Size(100,25)
-    $Version_code_label.Text = "Version Code£º"
+    $Version_code_label.Text = "Version Codeï¼š"
 
     $Target_sdk = New-Object System.Windows.Forms.RichTextBox
     $Target_sdk.Location = New-Object System.Drawing.Point(120,180) 
@@ -1010,7 +1010,7 @@ Function StartUp
     $Target_sdk_label = New-Object System.Windows.Forms.Label
     $Target_sdk_label.Location = New-Object System.Drawing.Point(20,180)
     $Target_sdk_label.Size = New-Object System.Drawing.Size(100,25)
-    $Target_sdk_label.Text = "ÊÊÅäÏµÍ³µÈ¼¶£º"
+    $Target_sdk_label.Text = "é€‚é…ç³»ç»Ÿç­‰çº§ï¼š"
 
     $Min_sdk = New-Object System.Windows.Forms.RichTextBox
     $Min_sdk.Location = New-Object System.Drawing.Point(120,220) 
@@ -1023,7 +1023,7 @@ Function StartUp
     $Min_sdk_label = New-Object System.Windows.Forms.Label
     $Min_sdk_label.Location = New-Object System.Drawing.Point(20,220)
     $Min_sdk_label.Size = New-Object System.Drawing.Size(100,25)
-    $Min_sdk_label.Text = "×îµÍÏµÍ³µÈ¼¶£º"
+    $Min_sdk_label.Text = "æœ€ä½ç³»ç»Ÿç­‰çº§ï¼š"
 
     $APK_MD5 = New-Object System.Windows.Forms.RichTextBox
     $APK_MD5.Location = New-Object System.Drawing.Point(120,20) 
@@ -1036,32 +1036,32 @@ Function StartUp
     $APK_MD5_label = New-Object System.Windows.Forms.Label
     $APK_MD5_label.Location = New-Object System.Drawing.Point(22,20)
     $APK_MD5_label.Size = New-Object System.Drawing.Size(100,25)
-    $APK_MD5_label.Text = "MD5£º"
+    $APK_MD5_label.Text = "MD5ï¼š"
 
     $APK_info_Button = New-Object System.Windows.Forms.Button
     $APK_info_Button.Location = New-Object System.Drawing.Point(580,220)
     $APK_info_Button.Size = New-Object System.Drawing.Size(90,40)
-    $APK_info_Button.Text = "²é¿´ÏêÏ¸ĞÅÏ¢"
+    $APK_info_Button.Text = "æŸ¥çœ‹è¯¦ç»†ä¿¡æ¯"
     $APK_info_Button.add_click( {ShowDetail} )
     $APK_info_Button.Enabled = $false
 
-    #ÒÔÏÂÎªÖ÷´°ÌåÏÔÊ¾ÔªËØ
+    #ä»¥ä¸‹ä¸ºä¸»çª—ä½“æ˜¾ç¤ºå…ƒç´ 
     $Time_label = New-Object System.Windows.Forms.Label
     $Time_label.Location = New-Object System.Drawing.Point(20,450)
     $Time_label.Size = New-Object System.Drawing.Size(400,20)
-    $Time_label.Text = "¹¤¾ßÆô¶¯ÓÚ£º" + (Get-Date -Format "yyyyÄêMÔÂddÈÕ dddd HH:mm:ss")
+    $Time_label.Text = "å·¥å…·å¯åŠ¨äºï¼š" + (Get-Date -Format "yyyyå¹´Mæœˆddæ—¥ dddd HH:mm:ss")
     $Time_label.Font = New-Object System.Drawing.Font("Microsoft YaHei",10,[System.Drawing.FontStyle]::Regular)
 
     $Exit_Button = New-Object System.Windows.Forms.Button
     $Exit_Button.Location = New-Object System.Drawing.Point(580,420)
     $Exit_Button.Size = New-Object System.Drawing.Size(90,40)
-    $Exit_Button.Text = "ÍË³ö"
+    $Exit_Button.Text = "é€€å‡º"
     $Exit_Button.add_click( {$MainForm.Close()} )
 
     $About_Button = New-Object System.Windows.Forms.Button
     $About_Button.Location = New-Object System.Drawing.Point(500,420)
     $About_Button.Size = New-Object System.Drawing.Size(60,40)
-    $About_Button.Text = "¹ØÓÚ"
+    $About_Button.Text = "å…³äº"
     $About_Button.add_click( {About} )
 
     $MainForm.Controls.Add($Exit_Button)
