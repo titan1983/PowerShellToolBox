@@ -851,6 +851,12 @@ Function StartUp
     $Power_Button.Text = "Power"
     $Power_Button.add_click( {Press_key 26} )
 
+    $Unlock_screen_Button = New-Object System.Windows.Forms.Button
+    $Unlock_screen_Button.Location = New-Object System.Drawing.Point(520,240)
+    $Unlock_screen_Button.Size = New-Object System.Drawing.Size(90,30)
+    $Unlock_screen_Button.Text = "滑动解锁屏幕"
+    $Unlock_screen_Button.add_click( {Press_key 62} )
+
     $Vol_up_Button = New-Object System.Windows.Forms.Button
     $Vol_up_Button.Location = New-Object System.Drawing.Point(500,120)
     $Vol_up_Button.Size = New-Object System.Drawing.Size(100,40)
@@ -894,14 +900,14 @@ Function StartUp
     $Screen_cap_Button.add_click( {Screen_cap} )
 
     $Brightness_Max_Button = New-Object System.Windows.Forms.Button
-    $Brightness_Max_Button.Location = New-Object System.Drawing.Point(520,260)
+    $Brightness_Max_Button.Location = New-Object System.Drawing.Point(520,280)
     $Brightness_Max_Button.Size = New-Object System.Drawing.Size(90,30)
     $Brightness_Max_Button.Text = "屏幕调至最亮"
     $Brightness_Max_Button.add_click( {SetBrightness 255} )
 
 
     $Brightness_Min_Button = New-Object System.Windows.Forms.Button
-    $Brightness_Min_Button.Location = New-Object System.Drawing.Point(520,300)
+    $Brightness_Min_Button.Location = New-Object System.Drawing.Point(520,320)
     $Brightness_Min_Button.Size = New-Object System.Drawing.Size(90,30)
     $Brightness_Min_Button.Text = "屏幕调至最暗"
     $Brightness_Min_Button.add_click( {SetBrightness 1} )
@@ -1112,6 +1118,7 @@ Function StartUp
     $Tab_option.Controls.Add($Screen_cap_Button)
     $Tab_option.Controls.Add($Brightness_Max_Button)
     $Tab_option.Controls.Add($Brightness_Min_Button)
+    $Tab_option.Controls.Add($Unlock_screen_Button)
 
     $Tab_apk_info.Controls.Add($OpenFile_button)
     $Tab_apk_info.Controls.Add($APK_size)
