@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell ¿¡»Àπ§æﬂ"
-$Global:version = "1.0.8"
+$Global:version = "1.0.9"
 
 Function Init_power
 {
