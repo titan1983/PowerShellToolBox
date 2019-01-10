@@ -31,10 +31,10 @@
 
 ## 下载地址：
 <b>*32位系统：</b>
-[PowerShellToolBox_32bit](https://github.com/titan1983/PowerShellToolBox/releases/download/1.0.9/PowerShellToolBox_32bit.exe)
+[PowerShellToolBox_32bit](https://github.com/titan1983/PowerShellToolBox/releases/download/1.0.10/PowerShellToolBox_32bit.exe)
 
 <b>*64位系统：</b>
-[PowerShellToolBox_64bit](https://github.com/titan1983/PowerShellToolBox/releases/download/1.0.9/PowerShellToolBox_64bit.exe)
+[PowerShellToolBox_64bit](https://github.com/titan1983/PowerShellToolBox/releases/download/1.0.10/PowerShellToolBox_64bit.exe)
 
 
 ## 问题反馈
