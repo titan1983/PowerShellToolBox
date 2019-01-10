@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.9"
+$Global:version = "1.0.10"
 
 Function Init_power
 {
@@ -19,12 +19,12 @@ Function Init_power
 
     if ( $wsr -eq 1 )
     {
-        switch ( ( $device_count = List_devices ) )
+        switch ( List_devices )
 	    {
             1 {
                 $list_devices = adb devices
 
-                switch ( ($list_devices) )
+                switch ( $list_devices )
                 {
                     {($list_devices[1].Contains( ":" ))}{$Console.Text = "远程设备，不予以初始化。";break}
                     {($list_devices[1].Contains("unauthorized"))}{$Console.Text = "设备未授权。";break}
@@ -33,10 +33,10 @@ Function Init_power
                     $init_1 = adb shell dumpsys batterystats --reset
                     $init_2 = adb shell dumpsys batterystats --enable full-wake-history
         
-                    if ( ( $init_1 -ne $null ) -or ( $init_2 -ne $null ) )
+                    if ( ( $null -ne $init_1 ) -or ( $null -ne $init_2 ) )
                     {
                         $Console.Text = [string]$init_1 + "`n" + [string]$init_2
-                        $wsi = $ws.popup($done,0,$title,0 + 64)
+                        $ws.popup($done,0,$title,0 + 64)
                     }
                     else
                     {
@@ -63,7 +63,7 @@ Function List_devices
 {
     $global:list_devices = adb devices
 
-    if ( $list_devices -ne $null )
+    if ( $null -ne $list_devices )
     {
         $temp = $null
         $wireless_count = 0
@@ -89,7 +89,7 @@ Function Export_bugreport
 #如果只连接了一台远程设备，则不导出。因为远程设备导出的Bugreport无效。
 {
     $temp_dir = Get-Location
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
     {
         1 {
             try
@@ -105,15 +105,15 @@ Function Export_bugreport
                         $Console.Text = "正在导出，此过程会耗时数分钟，请耐心等待。`n导出完成前本工具不可点击。"
                         if ( Test-Path bugreport_log )
                         {
-                            cd bugreport_log
+                            Set-Location bugreport_log
                         }
                         else
                         {
                             mkdir bugreport_log
-                            cd bugreport_log
+                            Set-Location bugreport_log
                         }
 
-                        if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+                        if ( ( adb shell getprop ro.build.version.sdk ) -ge 24 )
                         {
                             adb bugreport
                         }
@@ -124,9 +124,9 @@ Function Export_bugreport
                         }
 
                         $Console.Text = “导出完成！`n” + "Bugreport日志文件已存放于：`n" + ( Get-Location )
-                        cd $temp_dir
+                        Set-Location $temp_dir
                         $ws = New-Object -ComObject WScript.Shell
-                        $wsi = $ws.popup(“导出完成！”,0,$title,0 + 64)
+                        $ws.popup(“导出完成！”,0,$title,0 + 64)
                         ;break
                     }
                 }
@@ -150,7 +150,7 @@ Function Run_battery_historian
 	    write-host "Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/" -ForegroundColor Red
         $Console.Text = "Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/",0,"PowerShell 懒人工具系列",0 + 64)
+	    $ws.popup("Battery-Historian 已经在运行了。`n`n请访问 http://localhost:9999/",0,"PowerShell 懒人工具系列",0 + 64)
         Start-Process -FilePath http://localhost:9999/
     }
 
@@ -159,22 +159,22 @@ Function Run_battery_historian
         $Console.Text = "Battery Historian 正在运行。`n请访问 http://localhost:9999/"
 	    $path = Get-Item -Path $env:GOPATH\src\github.com\google\battery-historian
 	    
-        if ( $path -ne $null )
+        if ( $null -ne $path )
         {
-            cd $path
+            Set-Location $path
             Start-Process powershell.exe -ArgumentList "write-host Battery Historian 正在运行，请不要关闭此窗口。 -ForegroundColor Yellow `ngo run cmd/battery-historian/battery-historian.go" -WindowStyle Minimized
         }
         else
         {
             $Console.Text = "工具都没装你运行个毛线！"
         }
-        cd $temp_dir
+        Set-Location $temp_dir
     }
 }
 
 Function Show_devices_info
 {
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
     {
         1 {
             if ( $list_devices[1].Contains("unauthorized") )
@@ -215,7 +215,7 @@ Function Get_storage
 {
     $Get_storage = adb shell df /data/
 
-    if ( ( $Get_android_API = adb shell getprop ro.build.version.sdk ) -ge 24 )
+    if ( ( adb shell getprop ro.build.version.sdk ) -ge 24 )
     {
         [Math]::Round((($Get_storage[1] -replace "\s{2,}"," ").split(" ")[1]/1024/1024),1).toString() + "GB"
         [Math]::Round((($Get_storage[1] -replace "\s{2,}"," ").split(" ")[2]/1024/1024),1).toString() + "GB"
@@ -236,7 +236,7 @@ Function Reboot
 
     if ( $wsr -eq 1 )
     {
-        switch ( ( $device_count = List_devices ) )
+        switch ( List_devices )
         {
             1 {
                 $Info.Text = "正在重启，请稍候。"
@@ -255,7 +255,7 @@ Function Reboot
 
 Function isNull($target)
 {
-    if ( $target -ne $null )
+    if ( $null -ne $target )
     {
         return $target
     }
@@ -333,7 +333,7 @@ Function Do_Connect($ip, $port)
                 if ( $temp_result.Contains( "connected to" ) )
                 {
                     $Info.Text = "已连接成功。"
-                    $wsr = $ws.popup("已连接成功。",0,$title,0 + 64)
+                    $ws.popup("已连接成功。",0,$title,0 + 64)
                     $ConnectForm.Close()
                 }
                 else
@@ -371,7 +371,7 @@ Function Disconnect
         adb disconnect
         $Info.Text = "所有连接的远程设备均已断开。"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("所有连接的远程设备均已断开。",0,$title,0 + 64)
+	    $ws.popup("所有连接的远程设备均已断开。",0,$title,0 + 64)
     }
     catch [System.Exception]
     {
@@ -381,7 +381,7 @@ Function Disconnect
 
 Function ListPackage
 {
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
 	{
         1 {$Info.Text = adb shell pm list package;break}
         0 {$Info.Text = "没找到设备。";break}
@@ -391,7 +391,7 @@ Function ListPackage
 
 Function Press_key($keycode)
 {
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
 	    {
             1 {$Warning_label.Text = "";adb shell input keyevent $keycode;break}
             0 {$Warning_label.Text = "没找到设备。";break}
@@ -401,7 +401,7 @@ Function Press_key($keycode)
 
 Function Swipe_screen($start_x, $start_y, $end_x, $end_y)
 {
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
 	    {
             1 {$Warning_label.Text = "";adb shell input swipe $start_x $start_y $end_x $end_y;break}
             0 {$Warning_label.Text = "没找到设备。";break}
@@ -413,7 +413,7 @@ Function Screen_cap
 {
     $ws = New-Object -ComObject WScript.Shell
     $imagename = "Screenshot_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".png"
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
 	    {
             1 {
                 try
@@ -432,7 +432,7 @@ Function Screen_cap
 
 Function SetBrightness($value)
 {
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
 	{
         1 {$Warning_label.Text = "";adb shell settings put system screen_brightness $value;break}
         0 {$Warning_label.Text = "没找到设备。";break}
@@ -444,18 +444,18 @@ Function Logcat( $param )
 {
     $logcatname = "Logcat_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
     $ws = New-Object -ComObject WScript.Shell
-    switch ( ( $device_count = List_devices ) )
+    switch ( List_devices )
         {
             1 {
                 switch ( $param )
                     {
-                        {$param -eq "snap"}{$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time));break}
-                        {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$wsr = $ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
-                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + "\" + $logcatname);$wsr = $ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
+                        {$param -eq "snap"}{$Log.Text = (Show_in_line (adb logcat -d -v time));break}
+                        {$param -eq "clear"}{adb logcat -c;$Log.Text = "设备上的LogCat已清空。";$ws.popup("设备上的LogCat已清空。",0,$title,0 + 64);break}
+                        {$param -eq "export"}{adb logcat -d -v time > $logcatname;$Log.Text = ("LogCat日志已导出。`n日志已导出至:`n" + (Get-Location) + "\" + $logcatname);$ws.popup("LogCat日志已导出",0,$title,0 + 64);break}
                         {$param -eq "trace"}{
                                                 $trace_result = adb shell ls /data/anr
 
-                                                if ($trace_result -eq $null)
+                                                if ($null -eq $trace_result)
                                                 {
                                                     $Log.Text = "访问被拒绝，无权限。";break
                                                 }
@@ -465,12 +465,12 @@ Function Logcat( $param )
                                                     if ($trace_result[$i].toString() -eq "traces.txt")
                                                     {
                                                         adb pull /data/anr/traces.txt
-                                                        $Log.Text = ("ANR trace文件已导出。`n已导出至:`n" + (Get-Location) + "\traces.txt");$wsr = $ws.popup("ANR trace文件已导出",0,$title,0 + 64);break
+                                                        $Log.Text = ("ANR trace文件已导出。`n已导出至:`n" + (Get-Location) + "\traces.txt");$ws.popup("ANR trace文件已导出",0,$title,0 + 64);break
                                                     }
                                                     elseif ($trace_result[$i].toString() -eq "traces.txt.bugreport")
                                                     {
                                                         adb pull /data/anr/traces.txt.bugreport
-                                                        $Log.Text = ("trace文件不存在，导出trace.txt.bugreport文件。`n已导出至:`n" + (Get-Location) + "\traces.txt.bugreport");$wsr = $ws.popup("trace.txt.bugreport文件已导出",0,$title,0 + 64);break
+                                                        $Log.Text = ("trace文件不存在，导出trace.txt.bugreport文件。`n已导出至:`n" + (Get-Location) + "\traces.txt.bugreport");$ws.popup("trace.txt.bugreport文件已导出",0,$title,0 + 64);break
                                                     }
                                                     else
                                                     {
@@ -489,9 +489,9 @@ Function Logcat( $param )
 
 Function FilterLog($keyword)
 {
-    switch (( $device_count = List_devices ))
+    switch ( List_devices )
     {
-        1 {$Log.Text = (Show_in_line ($log_temp = adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}));break}
+        1 {$Log.Text = (Show_in_line (adb logcat -d -v time | Where-Object {$_ -like "*" + $keyword + "*"}));break}
         0 {$Log.Text = "没找到设备。";break}
         {$_ -ge 2} {$Log.Text = "连接了太多设备啦！";break}
     }
@@ -531,11 +531,11 @@ Function ShowAPKInfo($filepath)
 {
     $current = Get-Location
     $path = Get-Item -Path $env:ANDROID_SDK_HOME\build-tools
-    $temp = ls $path
+    $temp = Get-ChildItem $path
     $temp = $path.ToString() + "\" + $temp[$temp.Length-1].ToString() + "\"
-    cd $temp
+    Set-Location $temp
     cmd /c "aapt d badging $filepath > $env:TMP\temp.txt"
-    cd $current
+    Set-Location $current
 
     $APK_path.Text = $filepath
     $APK_size.Text = ((Get-Item $filepath).Length).ToString() + " Byte"
@@ -546,7 +546,7 @@ Function ShowAPKInfo($filepath)
     $Version_name.Text = ((Get-Content $env:TMP\temp.txt)[0].split(" "))[3].Substring(12).Trim("'")
     
     
-    if ((Get-Content $env:TMP\temp.txt|findstr "sdkVersion:") -ne $null)
+    if ($null -ne (Get-Content $env:TMP\temp.txt|findstr "sdkVersion:"))
     {
         $Min_sdk.Text = (Get-Content $env:TMP\temp.txt|findstr "sdkVersion:").Substring(11).Trim("'")
     }
@@ -555,7 +555,7 @@ Function ShowAPKInfo($filepath)
         $Min_sdk.Text = "NA"
     }
 
-    if ((Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:") -ne $null)
+    if ($null -ne (Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:"))
     {
         $Target_sdk.Text = (Get-Content $env:TMP\temp.txt | findstr "targetSdkVersion:").Substring(17).Trim("'")
     }
@@ -656,7 +656,7 @@ Function StartUp
     $Tab_logcat = New-Object System.Windows.Forms.TabPage
     $Tab_option = New-Object System.Windows.Forms.TabPage
     $Tab_apk_info = New-Object System.Windows.Forms.TabPage
-    $Tab_CPU_MEM = New-Object System.Windows.Forms.TabPage
+    #$Tab_CPU_MEM = New-Object System.Windows.Forms.TabPage
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
     $Tab_power.Padding = New-Object System.Windows.Forms.Padding(3);
