@@ -360,7 +360,7 @@ Function Do_Connect($ip, $port)
     {
         $Info.Text = "IPµÿ÷∑Œ¥ÃÓ–¥°£"
         $ws = New-Object -ComObject WScript.Shell
-	    $wsr = $ws.popup("IPµÿ÷∑Œ¥ÃÓ–¥°£",0,$title,0 + 64)
+	    $ws.popup("IPµÿ÷∑Œ¥ÃÓ–¥°£",0,$title,0 + 64)
     }
 }
 
@@ -418,7 +418,7 @@ Function Screen_cap
             1 {
                 try
                 {
-                    $Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; $wsr = $ws.popup( "Ωÿ∆¡≥…π¶£°Õº∆¨±£¥Ê‘⁄" + (Get-Location) + "\" + $imagename,0,$title,0 + 64); break
+                    $Warning_label.Text = "";adb shell /system/bin/screencap -p /sdcard/$imagename;adb pull /sdcard/$imagename; $ws.popup( "Ωÿ∆¡≥…π¶£°Õº∆¨±£¥Ê‘⁄" + (Get-Location) + "\" + $imagename,0,$title,0 + 64); break
                 }
                 catch [System.Exception]
                 {
