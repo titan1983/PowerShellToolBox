@@ -339,21 +339,21 @@ Function Do_Connect($ip, $port)
                 else
                 {
                     $Info.Text = "连接失败，请检查IP地址、端口号或WIFI设置。"
-                    $wsr = $ws.popup("连接失败，请检查IP地址、端口号或WIFI设置。",0,$title,0 + 64)
+                    $ws.popup("连接失败，请检查IP地址、端口号或WIFI设置。",0,$title,0 + 64)
                 }
             }
             else
             {
                 $Info.Text = "请填写正确格式的端口号。"
                 
-	            $wsr = $ws.popup("请填写正确格式的端口号。",0,$title,0 + 64)
+	            $ws.popup("请填写正确格式的端口号。",0,$title,0 + 64)
             }
         }
         else
         {
             $Info.Text = "请填写正确格式的IP地址。"
             $ws = New-Object -ComObject WScript.Shell
-	        $wsr = $ws.popup("请填写正确格式的IP地址。",0,$title,0 + 64)
+	        $ws.popup("请填写正确格式的IP地址。",0,$title,0 + 64)
         }
     }
     else
