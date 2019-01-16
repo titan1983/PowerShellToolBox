@@ -442,7 +442,7 @@ Function SetBrightness($value)
 
 Function Logcat( $param )
 {
-    $logcatname = "Logcat_" + [string](Get-Date -Format 'yyyyMMd_Hms') + ".txt"
+    $logcatname = "Logcat_" + [string](Get-Date -Format 'yyyyMMdd_HHmmss') + ".txt"
     $ws = New-Object -ComObject WScript.Shell
     switch ( List_devices )
         {
