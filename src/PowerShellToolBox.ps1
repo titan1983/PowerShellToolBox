@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.10"
+$Global:version = "1.0.11"
 
 Function Init_power
 {
@@ -619,7 +619,7 @@ Function About
     $Mail_button.Text = "发个邮件给作者"
     $Mail_button.Location = New-Object System.Drawing.Point(160,120)
     $Mail_button.Size = New-Object System.Drawing.Size(100,30)
-    $Mail_button.add_Click({Start-Process -FilePath mailto:titan_1983@163.com})
+    $Mail_button.add_Click({Start-Process -FilePath mailto:titan_1983@163.com?subject=[PowerShellToolBox]})
 
     $AboutForm.Controls.Add($OK_button)
     $AboutForm.Controls.Add($Author_label)
