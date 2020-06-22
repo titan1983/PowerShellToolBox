@@ -7,7 +7,7 @@ Add-Type -AssemblyName PresentationFramework
 
 #Global Define
 $Global:title = "PowerShell 懒人工具"
-$Global:version = "1.0.11"
+$Global:version = "1.0.12"
 
 Function Init_power
 {
@@ -631,6 +631,53 @@ Function About
     $AboutForm.ShowDialog()
 }
 
+Function RefreshEnv
+{
+    $Powershell_text.Text = $PSVersionTable.PSVersion
+
+    $bh_path = Get-Item -Path $env:GOPATH\src\github.com\google\battery-historian
+    $adb_version = cmd /c "adb version"
+    $java_path = Get-Item -Path $env:JAVA_HOME
+    $python_version = Get-Command python | Select-Object Version
+
+    if ( $null -ne $bh_path )
+    {
+        $BatteryHistorian_text.Text = "已正确部署"
+    }
+    else
+    {
+        $BatteryHistorian_text.Text = "未正确部署Battery-Historian环境"
+    }
+
+    if ( $null -ne $adb_version )
+    {
+        $ADB_text.Text = $adb_version | findstr "Android Debug Bridge version"
+    }
+    else
+    {
+        $ADB_text.Text = "未正确设置ADB环境"
+    }
+
+    if ( $null -ne $java_path )
+    {
+        $Java_version = Get-Command java | Select-Object Version
+        $Java_text.Text = $java_version.Version
+    }
+    else
+    {
+        $Java_text.Text = "未正确设置Java环境"
+    }
+
+    if ( $null -ne $python_version )
+    {
+        $Python_text.Text = $python_version.Version
+    }
+    else
+    {
+        $Python_text.Text = "未正确设置Python环境"
+    }
+}
+
 Function StartUp
 {
     $MainForm = New-Object System.Windows.Forms.Form
@@ -656,6 +703,7 @@ Function StartUp
     $Tab_logcat = New-Object System.Windows.Forms.TabPage
     $Tab_option = New-Object System.Windows.Forms.TabPage
     $Tab_apk_info = New-Object System.Windows.Forms.TabPage
+    $Tab_env = New-Object System.Windows.Forms.TabPage
     #$Tab_CPU_MEM = New-Object System.Windows.Forms.TabPage
 
     $Tab_power.Location = New-Object System.Drawing.Point(4, 22);
@@ -693,6 +741,13 @@ Function StartUp
     $Tab_apk_info.Text = "APK信息查询";
     $Tab_apk_info.UseVisualStyleBackColor = "true";
     $Tab_apk_info.AllowDrop = $True
+
+    $Tab_env.Location = New-Object System.Drawing.Point(4, 22);
+    $Tab_env.Padding = New-Object System.Windows.Forms.Padding(3);
+    $Tab_env.Size = New-Object System.Drawing.Size(700, 400);
+    $Tab_env.TabIndex = 0;
+    $Tab_env.Text = "本地环境信息";
+    $Tab_env.UseVisualStyleBackColor = "true";
 
     #以下为tab_power页的元素
     $Init_Button = New-Object System.Windows.Forms.Button
@@ -1051,6 +1106,78 @@ Function StartUp
     $APK_info_Button.add_click( {ShowDetail} )
     $APK_info_Button.Enabled = $false
 
+    #以下为tab_env页的元素
+    $Env_Button = New-Object System.Windows.Forms.Button
+    $Env_Button.Location = New-Object System.Drawing.Point(520,30)
+    $Env_Button.Size = New-Object System.Drawing.Size(120,40)
+    $Env_Button.Text = "刷新本地环境数据"
+    $Env_Button.add_click( {RefreshEnv} )
+
+    $Powershell_text = New-Object System.Windows.Forms.TextBox
+    $Powershell_text.Location = New-Object System.Drawing.Point(160,25)
+    $Powershell_text.Size = New-Object System.Drawing.Size(300,25)
+    $Powershell_text.ReadOnly = $True
+    $Powershell_text.Text = ""
+    $Powershell_text.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Powershell_text.ForeColor = "#370fa5"
+
+    $Powershell_label = New-Object System.Windows.Forms.Label
+    $Powershell_label.Location = New-Object System.Drawing.Point(22,25)
+    $Powershell_label.Size = New-Object System.Drawing.Size(120,25)
+    $Powershell_label.Text = "PowerShell 版本："
+
+    $ADB_text = New-Object System.Windows.Forms.TextBox
+    $ADB_text.Location = New-Object System.Drawing.Point(160,65)
+    $ADB_text.Size = New-Object System.Drawing.Size(300,25)
+    $ADB_text.ReadOnly = $True
+    $ADB_text.Text = ""
+    $ADB_text.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $ADB_text.ForeColor = "#370fa5"
+
+    $ADB_label = New-Object System.Windows.Forms.Label
+    $ADB_label.Location = New-Object System.Drawing.Point(22,65)
+    $ADB_label.Size = New-Object System.Drawing.Size(120,25)
+    $ADB_label.Text = "ADB 版本："
+
+    $Java_text = New-Object System.Windows.Forms.TextBox
+    $Java_text.Location = New-Object System.Drawing.Point(160,105)
+    $Java_text.Size = New-Object System.Drawing.Size(300,25)
+    $Java_text.ReadOnly = $True
+    $Java_text.Text = ""
+    $Java_text.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Java_text.ForeColor = "#370fa5"
+
+    $Java_label = New-Object System.Windows.Forms.Label
+    $Java_label.Location = New-Object System.Drawing.Point(22,105)
+    $Java_label.Size = New-Object System.Drawing.Size(120,25)
+    $Java_label.Text = "Java 版本："
+
+    $BatteryHistorian_text = New-Object System.Windows.Forms.TextBox
+    $BatteryHistorian_text.Location = New-Object System.Drawing.Point(160,145)
+    $BatteryHistorian_text.Size = New-Object System.Drawing.Size(300,25)
+    $BatteryHistorian_text.ReadOnly = $True
+    $BatteryHistorian_text.Text = ""
+    $BatteryHistorian_text.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $BatteryHistorian_text.ForeColor = "#370fa5"
+
+    $BatteryHistorian_label = New-Object System.Windows.Forms.Label
+    $BatteryHistorian_label.Location = New-Object System.Drawing.Point(22,145)
+    $BatteryHistorian_label.Size = New-Object System.Drawing.Size(120,25)
+    $BatteryHistorian_label.Text = "Battery-Historian："
+
+    $Python_text = New-Object System.Windows.Forms.TextBox
+    $Python_text.Location = New-Object System.Drawing.Point(160,185)
+    $Python_text.Size = New-Object System.Drawing.Size(300,25)
+    $Python_text.ReadOnly = $True
+    $Python_text.Text = ""
+    $Python_text.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $Python_text.ForeColor = "#370fa5"
+
+    $Python_label = New-Object System.Windows.Forms.Label
+    $Python_label.Location = New-Object System.Drawing.Point(22,185)
+    $Python_label.Size = New-Object System.Drawing.Size(120,25)
+    $Python_label.Text = "Python 版本："
+
     #以下为主窗体显示元素
     $Time_label = New-Object System.Windows.Forms.Label
     $Time_label.Location = New-Object System.Drawing.Point(20,450)
@@ -1080,6 +1207,7 @@ Function StartUp
     $tabControl.Controls.Add($Tab_logcat)
     $tabControl.Controls.Add($Tab_option)
     $tabControl.Controls.Add($Tab_apk_info)
+    $tabControl.Controls.Add($Tab_env)
     #$tabControl.Controls.Add($Tab_CPU_MEM)
 
     $Tab_power.Controls.Add($Export_bugreport_Button)
@@ -1138,6 +1266,18 @@ Function StartUp
     $Tab_apk_info.Controls.Add($APK_info_button)
     $Tab_apk_info.Controls.Add($APK_MD5)
     $Tab_apk_info.Controls.Add($APK_MD5_label)
+
+    $Tab_env.Controls.Add($Env_Button)
+    $Tab_env.Controls.Add($Powershell_text)
+    $Tab_env.Controls.Add($Powershell_label)
+    $Tab_env.Controls.Add($Java_text)
+    $Tab_env.Controls.Add($Java_label)
+    $Tab_env.Controls.Add($ADB_text)
+    $Tab_env.Controls.Add($ADB_label)
+    $Tab_env.Controls.Add($BatteryHistorian_text)
+    $Tab_env.Controls.Add($BatteryHistorian_label)
+    $Tab_env.Controls.Add($Python_text)
+    $Tab_env.Controls.Add($Python_label)
 
     $MainForm.Add_Shown({$MainForm.Activate()})
     $MainForm.ShowDialog()
